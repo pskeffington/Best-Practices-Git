@@ -1,0 +1,41 @@
+pipeline:
+  name: query-to-publication
+  purpose: Produce a publishable machine-learning manuscript through gated research artifacts.
+  gates:
+    - query
+    - literature
+    - protocol
+    - data
+    - modeling
+    - validation
+    - ethics
+    - manuscript
+    - submission
+  stages:
+    - id: 01_query
+      artifact: query_brief.md
+      owner_question: What exactly is being asked, for whom, and why does ML belong here?
+    - id: 02_literature
+      artifact: evidence_matrix.md
+      owner_question: What standards, findings, and gaps define the publishable contribution?
+    - id: 03_protocol
+      artifact: analysis_protocol.md
+      owner_question: What decisions are locked before analysis begins?
+    - id: 04_data
+      artifact: data_provenance.md
+      owner_question: Where did the data come from and what transformations are defensible?
+    - id: 05_modeling
+      artifact: model_plan.md
+      owner_question: Which baseline and candidate models are justified?
+    - id: 06_validation
+      artifact: validation_report.md
+      owner_question: Does the evidence support the claims?
+    - id: 07_ethics
+      artifact: ethics_review.md
+      owner_question: What harms, constraints, and limits must be disclosed?
+    - id: 08_manuscript
+      artifact: manuscript_plan.md
+      owner_question: How do the results become a coherent article?
+    - id: 09_submission
+      artifact: submission_packet.md
+      owner_question: Is the article ready for peer review and replication?
