@@ -1,0 +1,35 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage[style=apa,backend=biber]{biblatex}
+
+\addbibresource{../references/references.bib}
+
+\title{From Query to Publication: Best Practices for Publishable Machine-Learning Manuscripts}
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+\doublespacing
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/query-framing}
+\input{sections/methods}
+\input{sections/reproducibility}
+\input{sections/ethics}
+\input{sections/reporting}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\printbibliography
+
+\end{document}
