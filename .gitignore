@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# LaTeX build files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Generated artifacts
+artifacts/
+
+# Local data
+/data/raw/
+/data/derived/
+*.csv
+*.xlsx
+*.parquet
+*.feather
+*.rds
+
+# Environment
+.env
+.DS_Store
