@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PublisherPrecheckReport",
+  "type": "object",
+  "required": ["manuscript_id", "status", "dimensions", "red_flags"],
+  "properties": {
+    "manuscript_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PRECHECK_PASS", "PRECHECK_MINOR", "PRECHECK_MAJOR", "PRECHECK_FAIL"]
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dimension"
+      }
+    },
+    "red_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "editor_note": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "dimension": {
+      "type": "object",
+      "required": ["name", "status", "message"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PASS", "FLAG", "MISSING"]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
