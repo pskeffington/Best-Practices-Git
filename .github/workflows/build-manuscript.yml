@@ -1,0 +1,37 @@
+name: Build Manuscript
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'manuscript/stem-precheck/**'
+      - '.github/workflows/build-manuscript.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'manuscript/stem-precheck/**'
+      - '.github/workflows/build-manuscript.yml'
+  workflow_dispatch:
+
+jobs:
+  build-public-manuscript:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build public manuscript PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: claim-audit-trails-for-stem-manuscripts.tex
+          working_directory: manuscript/stem-precheck
+          latexmk_use_xelatex: true
+          args: -pdf -interaction=nonstopmode -halt-on-error -file-line-error
+
+      - name: Upload public manuscript PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-manuscript-pdf
+          path: manuscript/stem-precheck/claim-audit-trails-for-stem-manuscripts.pdf
+          if-no-files-found: error
