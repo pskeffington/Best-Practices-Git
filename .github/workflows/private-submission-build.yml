@@ -1,0 +1,54 @@
+name: Private Submission Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  private-submission-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out manuscript repository
+        uses: actions/checkout@v4
+        with:
+          path: manuscript-repo
+
+      - name: Check out private CV repository
+        uses: actions/checkout@v4
+        with:
+          repository: pskeffington/CV
+          token: ${{ secrets.CV_REPO_TOKEN }}
+          path: cv-repo
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Inject private author profile
+        run: |
+          cd manuscript-repo
+          python scripts/inject_author_profile.py \
+            --profile ../cv-repo/objects/author_profile.json \
+            --input manuscript/stem-precheck/claim-audit-trails-for-stem-manuscripts.tex \
+            --output manuscript/stem-precheck/local-submission/claim-auditability-personalized.tex
+
+      - name: Copy bibliography into local submission folder
+        run: |
+          cp manuscript-repo/manuscript/stem-precheck/references.bib \
+            manuscript-repo/manuscript/stem-precheck/local-submission/references.bib
+
+      - name: Build private personalized manuscript PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: claim-auditability-personalized.tex
+          working_directory: manuscript-repo/manuscript/stem-precheck/local-submission
+          latexmk_use_xelatex: true
+          args: -pdf -interaction=nonstopmode -halt-on-error -file-line-error
+
+      - name: Upload private submission PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: private-submission-pdf
+          path: manuscript-repo/manuscript/stem-precheck/local-submission/claim-auditability-personalized.pdf
+          if-no-files-found: error
