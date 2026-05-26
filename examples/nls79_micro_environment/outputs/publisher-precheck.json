@@ -1,0 +1,43 @@
+{
+  "dimensions": [
+    {
+      "message": "Core manuscript sections are present.",
+      "name": "manuscript_structure",
+      "status": "PASS"
+    },
+    {
+      "message": "Evidence tables are present.",
+      "name": "evidence_artifacts",
+      "status": "PASS"
+    },
+    {
+      "message": "References file and bibliography declaration are present.",
+      "name": "references",
+      "status": "PASS"
+    },
+    {
+      "message": "Funding statement is present.",
+      "name": "funding_statement",
+      "status": "PASS"
+    },
+    {
+      "message": "Associational and causal boundary language are present.",
+      "name": "claim_boundaries",
+      "status": "PASS"
+    },
+    {
+      "message": "Cox proportional-hazards caveat is present.",
+      "name": "cox_diagnostic_boundary",
+      "status": "PASS"
+    },
+    {
+      "message": "All extracted major claims are supported for review.",
+      "name": "claim_audit",
+      "status": "PASS"
+    }
+  ],
+  "editor_note": "The package is ready for substantive review under the STEM claim-audit framework. The manuscript includes source, references, funding statement, bounded claims, tables, and a claim audit trail. For full computational reproducibility, authors should also provide analysis code, data dictionary, and variable-construction scripts.",
+  "manuscript_id": "NLS-79",
+  "red_flags": [],
+  "status": "PRECHECK_PASS"
+}
