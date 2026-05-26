@@ -1,6 +1,8 @@
 """Drop-in helpers for ML manuscript projects."""
 
-from dataclasses import dataclass, field
+import json
+from dataclasses import asdict, dataclass, field
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -53,6 +55,27 @@ class RunRecord:
         return bool(self.artifacts) and bool(self.claims) and all(
             claim.is_ready() for claim in self.claims
         )
+
+    def to_dict(self) -> dict[str, object]:
+        """Return a JSON-ready run dictionary."""
+        return {
+            "name": self.name,
+            "status": "PASS" if self.is_ready() else "NEEDS_WORK",
+            "metrics": self.metrics,
+            "artifacts": self.artifacts,
+            "claims": [asdict(claim) for claim in self.claims],
+        }
+
+    def to_json(self) -> str:
+        """Return a formatted JSON run record."""
+        return json.dumps(self.to_dict(), indent=2, sort_keys=True) + "\n"
+
+    def write_json(self, path: str | Path) -> Path:
+        """Write the run record to a JSON file."""
+        output_path = Path(path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(self.to_json(), encoding="utf-8")
+        return output_path
 
 
 def hello_dropin() -> str:
