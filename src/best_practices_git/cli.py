@@ -1,5 +1,6 @@
 """Command-line interface for the query-to-publication workflow."""
 
+import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -29,18 +30,32 @@ class WorkflowCommand:
             if missing:
                 print("  missing: " + ", ".join(missing))
 
-    def write_audit_report(self) -> Path:
-        """Run verification and write a repeatable audit report."""
+    def current_git_ref(self) -> str:
+        """Return the current Git commit hash, if available."""
+        try:
+            result = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=self.root,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        except (OSError, subprocess.CalledProcessError):
+            return "unknown"
+        return result.stdout.strip() or "unknown"
+
+    def write_audit_report(self) -> tuple[Path, Path, Path, Path]:
+        """Run verification and write repeatable audit reports."""
         verifier = PipelineVerifier(
             pipeline=self.pipeline,
             mappings=default_mappings(),
         )
-        report = build_audit_report(verifier.run_all())
+        report = build_audit_report(
+            verifier.run_all(),
+            git_ref=self.current_git_ref(),
+        )
         audit_dir = self.root / "artifacts" / "audits"
-        audit_dir.mkdir(parents=True, exist_ok=True)
-        output_path = audit_dir / "latest-audit.md"
-        output_path.write_text(report.to_markdown(), encoding="utf-8")
-        return output_path
+        return report.write_outputs(audit_dir)
 
 
 def build_parser() -> ArgumentParser:
@@ -65,8 +80,10 @@ def main() -> None:
     command = WorkflowCommand(root=Path(args.root))
 
     if args.command == "audit":
-        output_path = command.write_audit_report()
-        print(f"Wrote audit report to {output_path}")
+        outputs = command.write_audit_report()
+        print("Wrote audit reports:")
+        for output_path in outputs:
+            print(f"- {output_path}")
         return
 
     if args.command == "init-artifacts":
