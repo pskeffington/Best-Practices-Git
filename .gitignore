@@ -24,6 +24,13 @@ build/
 # Generated artifacts
 artifacts/
 
+# Local private submission metadata and personalized builds
+private_author_profile.json
+local_author_profile.json
+manuscript/stem-precheck/*-personalized.tex
+manuscript/stem-precheck/*-submission.pdf
+manuscript/stem-precheck/local-submission/
+
 # Local data
 /data/raw/
 /data/derived/
