@@ -1,0 +1,121 @@
+# Sample Output: Drop-In Manuscript Parse and Reviewer Audit
+
+Source package: NLS-79 LaTeX manuscript package
+Generated at: 2026-05-26T01:00:24.173874+00:00
+SHA-256: f67952fcf9134af25281ed09bc7af7d162f62aa076fda030f4ceb20e0401590a
+
+## Reviewer Status
+
+MINOR_REVISION
+
+## Structure Metrics
+
+- Sections: 7
+- Subsections: 11
+- Tables: 4
+- Figures: 0
+- Citation commands: 26
+- Bibliography database declared: true
+- Associational language present: true
+- Causal caution present: true
+- Cox proportional-hazards caution present: true
+
+## Detected Sections
+
+1. Introduction
+2. Literature Review
+3. Data and Methods
+4. Results
+5. Discussion
+6. Limitations
+7. Conclusion
+
+## Reviewer Findings
+
+- PASS | query_clarity: Research gap, cohort, outcomes, and empirical objective are stated.
+- PASS | data_provenance: NLSY79 public-use data source and restrictions are described.
+- PASS | methods_transparency: Primary model families are specified and equations are included.
+- PASS | metrics_present: Effect estimates, standard errors, tests, p-values, and CIs are reported.
+- PASS | artifacts_present: 4 LaTeX tables detected as evidence artifacts.
+- PASS | claim_boundaries: Causal and Cox PH limitations are explicitly bounded.
+- FLAG | reproducibility_artifacts: No code, data dictionary, variable construction script, or external audit artifact is bundled with this single TeX file.
+- PASS | references_linkage: Manuscript declares bibliography database references.bib.
+
+## Extracted Claims
+
+### C001 | comparative
+
+Emergency savings are positively associated with marital stability ($b = 0.029$, $SE = 0.009$, $p = .001$).
+
+Evidence: Table tab:main_results -- Respondent fixed-effects LPM estimate b=0.029, SE=0.009, p=.001.
+
+Boundary: Associational within-person estimate; not causal evidence that savings independently cause marital stability.
+
+### C002 | descriptive
+
+Financial literacy is not statistically associated with completed fertility in the Poisson model ($b = -0.010$, $SE = 0.008$, $p = .185$).
+
+Evidence: Table tab:main_results -- Poisson estimate b=-0.010, SE=0.008, p=.185.
+
+Boundary: Null result applies to constructed later-wave financial-literacy measure and primary model only.
+
+### C003 | comparative
+
+Adolescent exposure to birth-control education is associated with lower completed fertility ($b = -0.038$, $SE = 0.017$, $p = .026$) and later entry into parenthood ($HR = 0.930$, log-HR $SE = 0.024$, $p = .003$), although the timing estimate is interpreted cautiously because proportional-hazards diagnostics indicated possible assumption violation.
+
+Evidence: Table tab:main_results -- Poisson estimate b=-0.038, SE=0.017, p=.026.
+
+Boundary: Observational association; birth-control education exposure may proxy background, school, local norms, or access.
+
+### C004 | descriptive
+
+Financial literacy is not statistically associated with completed fertility in the primary Poisson model.
+
+Evidence: Table tab:main_results -- Poisson estimate b=-0.010, SE=0.008, p=.185.
+
+Boundary: Null result applies to constructed later-wave financial-literacy measure and primary model only.
+
+### C005 | comparative
+
+Adolescent exposure to birth-control education is associated with lower completed fertility and, with proportional-hazards caveats, later entry into parenthood.
+
+Evidence: Table tab:main_results -- Poisson estimate b=-0.038, SE=0.017, p=.026.
+
+Boundary: Observational association; birth-control education exposure may proxy background, school, local norms, or access.
+
+## Evidence Artifacts
+
+- Table tab:descriptive_summary: Descriptive Summary of Core Analytic Measures
+- Table tab:model_samples: Model-Specific Analytic Samples
+- Table tab:main_results: Main Model Results for Financial Preparedness, Reproductive Education, and Family Formation
+- Table tab:robustness: Sensitivity and Diagnostic Summary
+- LaTeX manuscript source: NLS-79.tex
+
+## Machine-Readable Summary
+
+```json
+{
+  "name": "NLS-79.tex manuscript parse",
+  "status": "PASS",
+  "reviewer_status": "MINOR_REVISION",
+  "failed_count": 1,
+  "metrics": {
+    "document_bytes": 55793,
+    "section_count": 7,
+    "subsection_count": 11,
+    "table_count": 4,
+    "figure_count": 0,
+    "citep_count": 26,
+    "bibtex_database_declared": true,
+    "associational_language_present": true,
+    "causal_caution_present": true,
+    "cox_ph_caution_present": true
+  },
+  "failed_dimension": "reproducibility_artifacts",
+  "failed_message": "No code, data dictionary, variable construction script, or external audit artifact is bundled with this single TeX file."
+}
+```
+
+## Interpretation
+
+This sample demonstrates the intended reviewer-facing output of the drop-in pipeline. The manuscript source is parsed into structural metrics, claim records, evidence artifacts, and reviewer findings. The resulting reviewer status is MINOR_REVISION because the manuscript itself is strong, but the uploaded package lacks a full reproducibility bundle. Adding code, data dictionary, variable construction scripts, and an external audit artifact should move the package toward REVIEW_READY.
