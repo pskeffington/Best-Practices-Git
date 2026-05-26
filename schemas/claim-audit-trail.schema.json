@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClaimAuditTrail",
+  "type": "object",
+  "required": ["manuscript_id", "overall_status", "claims"],
+  "properties": {
+    "manuscript_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["PRECHECK_PASS", "PRECHECK_MINOR", "PRECHECK_MAJOR", "PRECHECK_FAIL"]
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim_audit"
+      }
+    },
+    "editor_summary": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "claim_audit": {
+      "type": "object",
+      "required": [
+        "claim_id",
+        "claim_text",
+        "manuscript_section",
+        "claim_level",
+        "evidence_artifact",
+        "boundary_note",
+        "editorial_status"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "manuscript_section": {
+          "type": "string"
+        },
+        "claim_level": {
+          "type": "string",
+          "enum": [
+            "descriptive",
+            "comparative",
+            "mechanistic",
+            "causal",
+            "predictive",
+            "generalizable",
+            "actionable",
+            "theoretical"
+          ]
+        },
+        "evidence_artifact": {
+          "type": "string"
+        },
+        "evidence_description": {
+          "type": "string"
+        },
+        "method_support": {
+          "type": "string"
+        },
+        "validation_or_justification": {
+          "type": "string"
+        },
+        "boundary_note": {
+          "type": "string"
+        },
+        "reproducibility_support": {
+          "type": "string"
+        },
+        "reviewer_finding": {
+          "type": "string"
+        },
+        "editorial_status": {
+          "type": "string",
+          "enum": [
+            "SUPPORTED",
+            "UNDERBOUND",
+            "MISSING_EVIDENCE",
+            "MISSING_METHOD",
+            "MISSING_REPRODUCIBILITY",
+            "OUT_OF_SCOPE"
+          ]
+        }
+      }
+    }
+  }
+}
