@@ -4,7 +4,7 @@ A publishable-manuscript workflow repository for using machine learning responsi
 
 **Maintainer:** Paul Skeffington, MS, MPH  
 **Repository status:** active best-practices scaffold and reusable documentation standard for science-based Git repositories.  
-**Last documentation refresh:** 2026-05-25
+**Last documentation refresh:** 2026-05-26
 
 ## Purpose
 
@@ -28,6 +28,10 @@ It is especially suited for:
 - Machine-learning manuscripts.
 - Open-data science projects.
 - Research repositories that require peer-review-ready audit trails.
+
+## Current update — 2026-05-26
+
+This repository is now the documentation-standard reference for the current research repo set. The immediate priority is to expand reusable templates and review gates so each project README can consistently state purpose, evidence status, source boundaries, reproducibility path, and manuscript-claim limits.
 
 ## Repository map
 
@@ -101,4 +105,4 @@ Before a project leaves scaffold status, confirm that:
 
 ## Status
 
-Documentation refreshed on 2026-05-25. The repository now serves as the best-practices standard for current science and manuscript repositories while the article scaffold continues to develop.
+Documentation refreshed on 2026-05-26. The repository now serves as the best-practices standard for current science and manuscript repositories while the article scaffold continues to develop.
