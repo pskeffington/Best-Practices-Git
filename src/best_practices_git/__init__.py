@@ -3,6 +3,7 @@
 from .claims import ClaimLevel, EvidenceSource, ManuscriptClaim
 from .dropin import ClaimRecord, RunRecord, hello_dropin
 from .pipeline import PipelineField, PipelineStage, ResearchPipeline, default_pipeline
+from .reviewer import ReviewerFinding, ReviewerReport, ReviewerScorer, ReviewerStatus
 from .standards import ReportingStandard, ScaffoldMapping, default_mappings, default_standards
 from .verification import PipelineVerifier, VerificationResult
 from .workflow import ManuscriptStage, ManuscriptWorkflow
@@ -19,6 +20,10 @@ __all__ = [
     "PipelineVerifier",
     "ReportingStandard",
     "ResearchPipeline",
+    "ReviewerFinding",
+    "ReviewerReport",
+    "ReviewerScorer",
+    "ReviewerStatus",
     "RunRecord",
     "ScaffoldMapping",
     "VerificationResult",
