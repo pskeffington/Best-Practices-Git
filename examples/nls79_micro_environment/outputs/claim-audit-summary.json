@@ -1,0 +1,46 @@
+{
+  "manuscript_id": "NLS-79",
+  "overall_status": "PRECHECK_PASS",
+  "claim_count": 5,
+  "supported_claim_count": 5,
+  "unsupported_claim_count": 0,
+  "red_flags": [],
+  "claims": [
+    {
+      "claim_id": "C001",
+      "claim_level": "comparative",
+      "editorial_status": "SUPPORTED",
+      "evidence_artifact": "Table tab:main_results",
+      "boundary": "Associational within-person estimate; not causal."
+    },
+    {
+      "claim_id": "C002",
+      "claim_level": "descriptive",
+      "editorial_status": "SUPPORTED",
+      "evidence_artifact": "Table tab:main_results",
+      "boundary": "Null result applies to the constructed measure and primary model only."
+    },
+    {
+      "claim_id": "C003",
+      "claim_level": "comparative",
+      "editorial_status": "SUPPORTED",
+      "evidence_artifact": "Table tab:main_results",
+      "boundary": "Observational association with potential contextual confounding."
+    },
+    {
+      "claim_id": "C004",
+      "claim_level": "comparative",
+      "editorial_status": "SUPPORTED",
+      "evidence_artifact": "Table tab:main_results; Table tab:robustness",
+      "boundary": "Timing estimate requires proportional-hazards caution."
+    },
+    {
+      "claim_id": "C005",
+      "claim_level": "interpretive",
+      "editorial_status": "SUPPORTED",
+      "evidence_artifact": "Table tab:main_results; Discussion synthesis",
+      "boundary": "Interpretive synthesis; not a causal pathway claim."
+    }
+  ],
+  "editor_summary": "The package is ready for substantive review under the STEM claim-audit framework. Full computational reproducibility would be strengthened by adding analysis code, a data dictionary, and variable-construction scripts."
+}
