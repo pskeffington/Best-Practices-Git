@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\usepackage[style=apa,backend=biber]{biblatex}
+
+\addbibresource{references.bib}
+
+\title{Claim-to-Evidence Audit Trails for STEM Manuscripts: A Pre-Review Validation Framework for Authors, Editors, and Publishers}
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+\doublespacing
+
+\begin{abstract}
+STEM manuscripts often ask editors and reviewers to reconstruct the relationship between claims, evidence, methods, limitations, and reproducibility materials from prose, tables, figures, references, and supplementary files. Existing reporting guidelines and transparency policies improve disclosure, but many submissions still lack a compact, reviewer-readable map from each major claim to the evidence and methodological support on which it depends. This article proposes a claim-to-evidence audit trail for STEM manuscripts. The framework classifies each major claim, links it to evidence artifacts and method support, records validation or justification, requires boundary language, and assigns an editorial status before peer review. The intended use is not to replace expert review, determine scientific truth, or automate editorial judgment. Instead, the framework provides an early validation layer that helps authors prepare more reviewable submissions, helps editors triage incomplete packages, and helps reviewers evaluate claims without reconstructing the evidence chain manually. A machine-readable schema and reviewer-facing report structure are proposed to support implementation across scientific publishing workflows.
+\end{abstract}
+
+\section{Introduction}
+
+Scientific peer review depends on the reviewer being able to evaluate whether a manuscript's claims are supported by appropriate evidence. In practice, this evaluation often requires reviewers to reconstruct an evidence chain from multiple locations: the abstract, main text, methods, tables, figures, citations, appendices, data statements, code repositories, and supplementary files. That reconstruction is labor-intensive and inconsistent, especially when a manuscript includes quantitative results, computational analyses, experimental claims, model outputs, or complex supplemental materials.
+
+This paper argues that STEM manuscripts would benefit from a pre-review claim-to-evidence audit trail. The audit trail is a structured artifact that identifies each major claim, classifies its claim level, links it to evidence and method support, records validation or justification, states the appropriate boundary language, and assigns an editorial status. The goal is to make the evidence chain visible before peer review. The audit trail is designed for authors preparing submissions, editors conducting intake checks, reviewers evaluating claims, and publishers seeking consistent pre-review validation workflows.
+
+The framework builds on the same logic that motivates transparency and reporting initiatives. The Transparency and Openness Promotion Guidelines describe practices intended to increase the verifiability of empirical research claims, including study registration, study protocols, analysis plans, materials transparency, data transparency, analytic-code transparency, and reporting transparency \parencite{cos_top_2025}. PRISMA 2020 provides checklists and flow diagrams to improve reporting of systematic reviews \parencite{prisma_2020}. Computational reproducibility efforts similarly emphasize the value of preserving analysis traces, data, methods, and executable materials as part of publication \parencite{meijer_2024_prat}. The claim-to-evidence audit trail proposed here does not replace these efforts. It coordinates them around the unit that editors and reviewers ultimately evaluate: the manuscript claim.
+
+\section{Problem Statement}
+
+Many editorial checks focus on whether a manuscript is formatted correctly, whether references are present, whether plagiarism screens raise concerns, whether required statements are included, or whether reporting checklists have been completed. These checks are necessary but incomplete. A manuscript can satisfy many administrative requirements while still leaving reviewers uncertain about which evidence supports which claims.
+
+The central problem is claim opacity. A claim may appear in the abstract, discussion, or conclusion while its supporting evidence is located in a table, figure, model output, cited source, experimental protocol, or supplementary file. The claim may also require boundary language: for example, an association should not be written as a causal result, internal validation should not be written as broad generalization, and exploratory analysis should not be written as confirmation. When these boundaries are not explicit, reviewers must infer the appropriate interpretation.
+
+\section{Framework}
+
+The proposed framework treats each major scientific claim as an auditable object. A claim audit record contains the claim text, manuscript location, claim level, evidence artifact, method or protocol support, validation or justification, boundary note, reproducibility or source support, reviewer finding, and editorial status.
+
+\begin{table}[htbp]
+\centering
+\caption{Core fields in a claim-to-evidence audit trail}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}X}
+\toprule
+\textbf{Field} & \textbf{Purpose} \\
+\midrule
+Claim ID & Provides a stable identifier for author, editor, and reviewer discussion. \\
+Claim text & Records the exact claim or a close paraphrase. \\
+Manuscript section & Locates where the claim appears. \\
+Claim level & Classifies the claim as descriptive, comparative, mechanistic, causal, predictive, generalizable, actionable, or theoretical. \\
+Evidence artifact & Identifies the table, figure, dataset, protocol, equation, source, or supplement supporting the claim. \\
+Method support & Links the claim to the design, protocol, analysis, experiment, or model that produced the evidence. \\
+Validation or justification & States the robustness check, validation result, theoretical derivation, or interpretive justification. \\
+Boundary note & States what the claim does not establish. \\
+Reproducibility support & Identifies code, data, materials, protocol, or source availability where relevant. \\
+Editorial status & Labels the claim as supported, underbounded, missing evidence, missing method, missing reproducibility, or out of scope. \\
+\bottomrule
+\end{tabularx}
+\end{adjustbox}
+\end{table}
+
+\section{Claim Levels}
+
+Claim levels help editors and reviewers determine whether the support required for a claim matches the language used in the manuscript. A descriptive claim requires evidence that the observation, measurement, source, or pattern exists. A comparative claim requires evidence that groups, models, systems, treatments, or cases are being compared appropriately. A causal claim requires a design capable of supporting causal interpretation. A predictive claim requires validation evidence. A generalizable claim requires support beyond a narrow sample, system, or setting. An actionable claim requires evidence sufficient to support implementation, deployment, policy, or practice change.
+
+\begin{table}[htbp]
+\centering
+\caption{STEM claim levels and support expectations}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabularx}{\textwidth}{p{0.22\textwidth}X X}
+\toprule
+\textbf{Claim level} & \textbf{Typical meaning} & \textbf{Expected support} \\
+\midrule
+Descriptive & Describes observations, measurements, datasets, samples, or patterns. & Data summary, figure, table, source, specimen record, or documented observation. \\
+Comparative & Compares groups, treatments, models, systems, conditions, or cases. & Comparison design, statistical test, benchmark, table, or controlled contrast. \\
+Mechanistic & Proposes a process, pathway, or explanatory relation. & Experimental design, mechanistic model, converging evidence, or biological/physical rationale. \\
+Causal & Claims cause-effect relation. & Causal design, intervention, experiment, identification strategy, or strong causal justification. \\
+Predictive & Claims prediction, classification, or forecasting performance. & Validation design, metric, baseline, and uncertainty or robustness evidence. \\
+Generalizable & Extends findings beyond the observed setting. & External validation, replication, representative sampling, or justified scope argument. \\
+Actionable & Recommends intervention, deployment, policy, or practice change. & Evidence of benefit, risk, feasibility, limits, and relevant ethics or governance review. \\
+Theoretical & Derives or supports a formal result. & Derivation, proof, equation, simulation, or theoretical consistency check. \\
+\bottomrule
+\end{tabularx}
+\end{adjustbox}
+\end{table}
+
+\section{Author and Editor Workflow}
+
+For authors, the audit trail functions as a pre-submission check. Before submission, authors identify major claims and verify that each one has appropriate evidence and boundary language. This process can reveal unsupported claims, overly strong language, missing methods, and incomplete reproducibility materials.
+
+For editors, the audit trail functions as an intake artifact. It can support triage before a manuscript is sent to external reviewers. A manuscript with a complete audit trail may proceed to substantive peer review. A manuscript with missing core evidence, missing method support, or missing reproducibility materials may be returned to authors before reviewer time is spent.
+
+\begin{table}[htbp]
+\centering
+\caption{Editorial statuses for claim-level audit records}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabularx}{\textwidth}{p{0.28\textwidth}X}
+\toprule
+\textbf{Status} & \textbf{Editorial interpretation} \\
+\midrule
+Supported & Evidence, method, and boundary language are adequate for review. \\
+Underbounded & Evidence exists, but claim language is stronger than the support allows. \\
+Missing evidence & The claim lacks a traceable artifact, source, figure, table, or supplement. \\
+Missing method & The claim lacks adequate design, method, protocol, or analysis support. \\
+Missing reproducibility & The claim depends on unavailable code, data, materials, protocol, or source material. \\
+Out of scope & The claim exceeds the design, evidence base, or stated purpose of the manuscript. \\
+\bottomrule
+\end{tabularx}
+\end{adjustbox}
+\end{table}
+
+\section{Relationship to Existing Reporting and Transparency Practices}
+
+The audit trail is not a replacement for reporting guidelines, transparency policies, or peer review. Instead, it provides a claim-level organizing layer. Reporting guidelines usually specify what should be disclosed. Transparency policies often specify whether materials, data, code, or protocols should be available. The claim-to-evidence audit trail asks a complementary question: which disclosed materials support which claims, and does the claim language remain within the evidence boundary?
+
+This distinction matters for publishers. An author may provide a data availability statement, code repository, reporting checklist, and supplementary appendix, yet still leave the claim-level evidence map unclear. The proposed audit trail coordinates these materials around manuscript claims.
+
+\section{Implementation Artifact}
+
+The framework can be represented as both a human-readable report and a machine-readable schema. The human-readable report supports author revision, editor triage, and reviewer navigation. The machine-readable schema supports publisher intake systems, automated package checks, and reproducibility workflows.
+
+The accompanying implementation package includes a claim audit schema, publisher pre-check schema, reviewer report template, author checklist, and sample output. The sample output demonstrates how a manuscript can be parsed into structural metrics, evidence artifacts, extracted claims, boundary notes, reviewer findings, and a pre-check status. The implementation is intentionally modular: the STEM core records claims, evidence, methods, boundaries, and reproducibility support, while profile-specific adapters can add domain checks for machine learning, quantitative empirical work, laboratory experiments, computational modeling, clinical research, environmental science, engineering systems, and systematic reviews.
+
+\section{Limitations}
+
+The framework does not determine whether a scientific claim is true. It does not replace expert judgment, domain review, statistical review, methodological review, or editorial decision-making. It also should not be used to reject manuscripts automatically. Its role is narrower: it evaluates whether the submitted package contains a reviewer-readable evidence chain adequate for peer review.
+
+Automated or semi-automated claim extraction may miss implicit claims, misclassify claim strength, or fail to detect subtle overstatement. For this reason, the audit trail should remain author-verifiable and editor-reviewable. The most appropriate use is as a pre-review validation artifact, not as a final judgment on scientific merit.
+
+\section{Conclusion}
+
+A claim-to-evidence audit trail can make STEM manuscripts more reviewable before peer review begins. By linking each major claim to evidence, methods, validation or justification, boundary language, and reproducibility support, the framework gives authors a clearer pre-submission check, editors a triage artifact, and reviewers a structured map of the scientific argument. The contribution is not another reporting checklist. It is a claim-centered evidence layer for scientific publishing.
+
+\section*{Data and Code Availability}
+
+This manuscript is a framework article. The accompanying repository contains the manuscript source, schema artifacts, author and reviewer templates, sample output, and implementation modules for generating claim and reviewer audit records.
+
+\section*{Funding}
+
+No external funding is reported for this framework manuscript.
+
+\section*{Competing Interests}
+
+The author reports no competing interests for this framework manuscript.
+
+\printbibliography
+
+\end{document}
