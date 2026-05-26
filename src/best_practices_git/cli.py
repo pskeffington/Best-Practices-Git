@@ -3,7 +3,10 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
+from .audit import build_audit_report
 from .pipeline import default_pipeline
+from .standards import default_mappings
+from .verification import PipelineVerifier
 
 
 class WorkflowCommand:
@@ -26,13 +29,26 @@ class WorkflowCommand:
             if missing:
                 print("  missing: " + ", ".join(missing))
 
+    def write_audit_report(self) -> Path:
+        """Run verification and write a repeatable audit report."""
+        verifier = PipelineVerifier(
+            pipeline=self.pipeline,
+            mappings=default_mappings(),
+        )
+        report = build_audit_report(verifier.run_all())
+        audit_dir = self.root / "artifacts" / "audits"
+        audit_dir.mkdir(parents=True, exist_ok=True)
+        output_path = audit_dir / "latest-audit.md"
+        output_path.write_text(report.to_markdown(), encoding="utf-8")
+        return output_path
+
 
 def build_parser() -> ArgumentParser:
     """Build the CLI parser."""
     parser = ArgumentParser(description="Manage the manuscript workflow scaffold.")
     parser.add_argument(
         "command",
-        choices=("init-artifacts", "status"),
+        choices=("audit", "init-artifacts", "status"),
         help="Workflow command to run.",
     )
     parser.add_argument(
@@ -47,6 +63,11 @@ def main() -> None:
     """Run the CLI."""
     args = build_parser().parse_args()
     command = WorkflowCommand(root=Path(args.root))
+
+    if args.command == "audit":
+        output_path = command.write_audit_report()
+        print(f"Wrote audit report to {output_path}")
+        return
 
     if args.command == "init-artifacts":
         command.render_templates()
