@@ -4,7 +4,7 @@ A publishable-manuscript workflow repository for using machine learning responsi
 
 **Maintainer:** Paul Skeffington, MS, MPH  
 **Repository status:** active best-practices scaffold and reusable documentation standard for science-based Git repositories.  
-**Last documentation refresh:** 2026-05-26
+**Last documentation refresh:** 2026-08-17
 
 ## Purpose
 
@@ -29,9 +29,9 @@ It is especially suited for:
 - Open-data science projects.
 - Research repositories that require peer-review-ready audit trails.
 
-## Current update — 2026-05-26
+## Current update — 2026-08-17
 
-This repository is now the documentation-standard reference for the current research repo set. The immediate priority is to expand reusable templates and review gates so each project README can consistently state purpose, evidence status, source boundaries, reproducibility path, and manuscript-claim limits.
+This repository remains the documentation-standard reference for the current public research repo set. The immediate priority is to expand reusable templates and review gates so each project README can consistently state purpose, evidence status, source boundaries, reproducibility path, manuscript-claim limits, and public-interest scope.
 
 ## Repository map
 
@@ -82,7 +82,7 @@ Working title:
 
 > From Query to Publication: Best Practices for Publishable Machine-Learning Manuscripts
 
-The manuscript is designed as a best-practices article for researchers using machine learning in empirical, policy, public health, social science, intelligence, or operational research settings.
+The manuscript is designed as a best-practices article for researchers using machine learning in empirical, policy, public health, social science, civic, or other public-interest applied research settings.
 
 ## Practical review gates
 
@@ -105,4 +105,4 @@ Before a project leaves scaffold status, confirm that:
 
 ## Status
 
-Documentation refreshed on 2026-05-26. The repository now serves as the best-practices standard for current science and manuscript repositories while the article scaffold continues to develop.
+Documentation refreshed on 2026-08-17. The repository continues to serve as the best-practices standard for public-facing science and manuscript repositories while the article scaffold develops.
