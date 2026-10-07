@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "grant-pipeline-config.v1",
+  "updated": "2026-10-07",
+  "freshnessDays": 14,
+  "draftThreshold": 85,
+  "allowedStatuses": ["target-now", "next-cycle", "partner-led"],
+  "sources": [
+    {
+      "project": "mh.institute",
+      "repository": "pskeffington/mh.institute",
+      "path": "data/grants/opportunities.json"
+    },
+    {
+      "project": "gaming.institute",
+      "repository": "pskeffington/gaming.institute",
+      "path": "data/grants/opportunities.json"
+    }
+  ]
+}
