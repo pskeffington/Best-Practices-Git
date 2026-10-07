@@ -25,12 +25,25 @@ jobs:
       - name: Fetch reviewed grant registries
         run: |
           mkdir -p .grant-input
-          gh api "repos/pskeffington/mh.institute/contents/data/grants/opportunities.json?ref=main"             -H "Accept: application/vnd.github.raw+json" > .grant-input/mh.institute.json
-          gh api "repos/pskeffington/gaming.institute/contents/data/grants/opportunities.json?ref=main"             -H "Accept: application/vnd.github.raw+json" > .grant-input/gaming.institute.json
+          gh api "repos/pskeffington/mh.institute/contents/data/grants/opportunities.json?ref=main" \
+            -H "Accept: application/vnd.github.raw+json" \
+            > .grant-input/mh.institute.json
+          gh api "repos/pskeffington/gaming.institute/contents/data/grants/opportunities.json?ref=main" \
+            -H "Accept: application/vnd.github.raw+json" \
+            > .grant-input/gaming.institute.json
 
-      - name: Build draft packets
+      - name: Build sponsor-aware draft packets
         run: |
-          python scripts/build-grant-drafts.py             --registry mh.institute=.grant-input/mh.institute.json             --registry gaming.institute=.grant-input/gaming.institute.json
+          python scripts/build-grant-drafts.py \
+            --profiles grants/sponsor-profiles.json \
+            --registry mh.institute=.grant-input/mh.institute.json \
+            --registry gaming.institute=.grant-input/gaming.institute.json
+
+      - name: Lint generated proposal packets
+        run: |
+          python scripts/grant_lint.py grants/generated \
+            --profiles grants/sponsor-profiles.json \
+            --json-out grants/generated/lint-report.json
 
       - name: Create review branch and pull request
         run: |
@@ -44,7 +57,11 @@ jobs:
           git config user.email "grant-pipeline[bot]@users.noreply.github.com"
           git checkout -b "$branch"
           git add grants/generated
-          git commit -m "grants: refresh generated draft packets"
+          git commit -m "grants: refresh sponsor-aware draft packets"
           git push origin "$branch"
 
-          gh pr create             --base main             --head "$branch"             --title "grants: refresh auto-draft queue"             --body "Automated grant drafting refresh. Drafts are generated only from source registries that pass freshness, deadline, fit, applicant-route, and hold gates. Human review is required before submission use."
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "grants: refresh sponsor-aware auto-draft queue" \
+            --body "Automated grant drafting refresh. Drafts are generated only from source registries that pass freshness, deadline, fit, applicant-route, and hold gates. Sponsor profiles define proposal architecture and review criteria. A deterministic lint report is included. Human review is required before submission use."
