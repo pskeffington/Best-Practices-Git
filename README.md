@@ -4,7 +4,7 @@ A publishable-manuscript workflow repository for using machine learning responsi
 
 **Maintainer:** Paul Skeffington, MS, MPH  
 **Repository status:** active best-practices scaffold and reusable documentation standard for science-based Git repositories.  
-**Last documentation refresh:** 2026-08-17
+**Last documentation refresh:** 2026-10-07
 
 ## Purpose
 
@@ -14,7 +14,7 @@ This repository is organized around a full scholarly production pipeline:
 2. Convert the query into a reproducible machine-learning or quantitative study design.
 3. Document data provenance, preprocessing, model development, validation, and limitations.
 4. Produce a publication-ready manuscript with transparent methods and review checklists.
-5. Preserve all artifacts required for peer review, replication, audit, and future extension.
+5. Preserve all artifacts required for peer review, replication, audit, and future extension.\n6. Convert verified funding opportunities into sponsor-aware grant drafts that can hand funded work directly into the manuscript pipeline.
 
 ## Scope
 
@@ -29,15 +29,15 @@ It is especially suited for:
 - Open-data science projects.
 - Research repositories that require peer-review-ready audit trails.
 
-## Current update — 2026-08-17
+## Current update — 2026-10-07
 
-This repository remains the documentation-standard reference for the current public research repo set. The immediate priority is to expand reusable templates and review gates so each project README can consistently state purpose, evidence status, source boundaries, reproducibility path, manuscript-claim limits, and public-interest scope.
+This repository remains the documentation-standard reference for the current public research repo set. The current expansion adds a sponsor-aware grant compiler so funding applications and eventual manuscripts can share the same source, evidence, protocol, validation, and claim-audit controls.
 
 ## Repository map
 
 ```text
 .
-├── manuscript/              # LaTeX manuscript source
+├── grants/                  # Sponsor-aware grant compiler, profiles, literature review, and writing standards\n├── manuscript/              # LaTeX manuscript source
 │   ├── main.tex
 │   └── sections/
 ├── docs/                    # Workflow guidance and editorial standards
@@ -48,6 +48,14 @@ This repository remains the documentation-standard reference for the current pub
 ├── references/              # Bibliography and source notes
 └── artifacts/               # Generated manuscript outputs; not committed by default
 ```
+
+## Grant compiler
+
+The repository now includes a grant-to-manuscript build system. It consumes reviewed opportunity registries from project repositories, applies freshness and eligibility gates, binds each opportunity to a sponsor profile, creates a reviewer-oriented proposal scaffold, and runs deterministic lint checks before a draft can advance.
+
+Current sponsor profiles cover NIH research project grants under the current Simplified Review Framework, NIH SBIR/STTR, NSF research proposals, SAMHSA discretionary grants, and a generic research/foundation fallback. See `grants/LITERATURE_REVIEW.md`, `grants/WRITING_STANDARD.md`, and `grants/sponsor-profiles.json`.
+
+The design rule is that sponsor instructions, evidence provenance, and reviewer criteria control generation. Model-generated prose never outranks the live funding opportunity or verified project evidence.
 
 ## Recommended branch workflow
 
@@ -105,4 +113,4 @@ Before a project leaves scaffold status, confirm that:
 
 ## Status
 
-Documentation refreshed on 2026-08-17. The repository continues to serve as the best-practices standard for public-facing science and manuscript repositories while the article scaffold develops.
+Documentation refreshed on 2026-10-07. The repository continues to serve as the best-practices standard for public-facing science and manuscript repositories while the article scaffold develops.
