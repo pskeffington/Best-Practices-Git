@@ -17,10 +17,18 @@ Core controls:
 
 - `LITERATURE_REVIEW.md` — review of grant-compilation patterns, open-source tooling, published grantsmanship literature, and official sponsor guidance.
 - `WRITING_STANDARD.md` — proposal-writing rules used across projects.
+- `ROADMAP.md` — gated milestone progression from opportunity intake through submission and award handoff.
+- `roadmap.json` — machine-readable gate state for automation/HUD use.
 - `sponsor-profiles.json` — machine-readable NIH, NIH SBIR/STTR, NSF, SAMHSA, and generic proposal architecture/review rules.
 - `pipeline-config.json` — portfolio ingestion and drafting thresholds.
 - `../scripts/build-grant-drafts.py` — deterministic sponsor-aware scaffold compiler.
 - `../scripts/grant_lint.py` — pre-review proposal linter.
+
+## Current roadmap status
+
+**Overall:** `G7 PASS / G8 NEXT`
+
+The compiler foundation, admission/freshness controls, sponsor binding, deterministic draft generation, and lint gates are active. Evidence auto-assembly and aims auto-composition are partial; specialist automated review is the next execution gate. See `ROADMAP.md` for G0-G14 progression.
 
 ## Draft admission gates
 
