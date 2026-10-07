@@ -17,7 +17,7 @@ def find_profile(text: str, profiles: dict, explicit: str | None) -> tuple[str, 
     if explicit:
         return explicit, profiles[explicit]
 
-    match = re.search(r"\*\*Sponsor profile:\*\*\s*\`?([a-z0-9_\-]+)\`?", text, re.I)
+    match = re.search(r"\*\*Sponsor profile:\*\*\s*`?([a-z0-9_-]+)`?", text, re.I)
     if match and match.group(1) in profiles:
         key = match.group(1)
         return key, profiles[key]
@@ -51,7 +51,7 @@ def heading_present(text: str, name: str) -> bool:
 
 def section_text(text: str, heading: str) -> str:
     match = re.search(
-        rf"^(#{{1,6}})\\s+.*{re.escape(heading)}.*$",
+        rf"^(#{{1,6}})\s+.*{re.escape(heading)}.*$",
         text,
         flags=re.I | re.M,
     )
@@ -61,7 +61,7 @@ def section_text(text: str, heading: str) -> str:
     level = len(match.group(1))
     start = match.end()
     remainder = text[start:]
-    next_heading = re.search(rf"^#{{1,{level}}}\\s+", remainder, flags=re.M)
+    next_heading = re.search(rf"^#{{1,{level}}}\s+", remainder, flags=re.M)
     end = start + next_heading.start() if next_heading else len(text)
     return text[start:end].strip()
 
