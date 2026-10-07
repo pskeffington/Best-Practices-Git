@@ -50,13 +50,20 @@ def heading_present(text: str, name: str) -> bool:
 
 
 def section_text(text: str, heading: str) -> str:
-    pattern = re.compile(
-        rf"^#{{1,6}}\s+.*{re.escape(heading)}.*$\n(.*?)(?=^#{{1,6}}\s+|\Z)",
-        flags=re.I | re.M | re.S,
+    match = re.search(
+        rf"^(#{{1,6}})\\s+.*{re.escape(heading)}.*$",
+        text,
+        flags=re.I | re.M,
     )
-    match = pattern.search(text)
-    return match.group(1).strip() if match else ""
+    if not match:
+        return ""
 
+    level = len(match.group(1))
+    start = match.end()
+    remainder = text[start:]
+    next_heading = re.search(rf"^#{{1,{level}}}\\s+", remainder, flags=re.M)
+    end = start + next_heading.start() if next_heading else len(text)
+    return text[start:end].strip()
 
 def issue(level: str, code: str, message: str, section: str | None = None) -> dict:
     result = {"level": level, "code": code, "message": message}
