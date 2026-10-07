@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "grant-roadmap.v1",
+  "updated": "2026-10-07",
+  "overallStatus": "G7_PASS_G8_NEXT",
+  "northStar": "Defensible, reviewable, evidence-grounded proposal assembly rather than maximum prose generation.",
+  "gates": [
+    {"id":"G0","name":"Pipeline foundation","status":"PASS","milestone":"M0"},
+    {"id":"G1","name":"Opportunity intake and admission control","status":"PASS","milestone":"M1"},
+    {"id":"G2","name":"Freshness and authoritative-source control","status":"PASS","milestone":"M1"},
+    {"id":"G3","name":"Sponsor-profile binding","status":"PASS","milestone":"M2"},
+    {"id":"G4","name":"Evidence and landscape assembly","status":"IN_PROGRESS","milestone":"M3"},
+    {"id":"G5","name":"Aims / objectives architecture","status":"PARTIAL_PASS","milestone":"M4"},
+    {"id":"G6","name":"Sponsor-aware deterministic draft generation","status":"PASS","milestone":"M5"},
+    {"id":"G7","name":"Deterministic lint and compliance precheck","status":"PASS","milestone":"M6"},
+    {"id":"G8","name":"Specialist automated review","status":"NEXT","milestone":"M7"},
+    {"id":"G9","name":"Controlled revision loop","status":"NOT_STARTED","milestone":"M8"},
+    {"id":"G10","name":"Budget / effort / timeline compiler","status":"NOT_STARTED","milestone":"M9"},
+    {"id":"G11","name":"Submission packet assembly","status":"NOT_STARTED","milestone":"M10"},
+    {"id":"G12","name":"Institutional / partner readiness","status":"EXTERNAL_BLOCK","milestone":"M11"},
+    {"id":"G13","name":"Submission readiness decision","status":"LOCKED","milestone":"M12"},
+    {"id":"G14","name":"Award activation and manuscript handoff","status":"SCAFFOLDED","milestone":"M13"}
+  ],
+  "nextQueue": [
+    {"priority":1,"id":"G8.1","task":"Define reviewer finding schema, severity taxonomy, and PASS/REVISE/HOLD contract"},
+    {"priority":2,"id":"G8.2","task":"Implement specialist review runners and panel synthesis"},
+    {"priority":3,"id":"G4.1","task":"Add structured evidence manifest with claim linkage and freshness"},
+    {"priority":4,"id":"G5.1","task":"Add aim coverage scoring for evidence, endpoint, risk, alternative, deliverable, budget, and owner"},
+    {"priority":5,"id":"G9.1","task":"Add versioned revision ledger tied to reviewer findings"},
+    {"priority":6,"id":"G10.1","task":"Add structured budget/work/effort/timeline model"}
+  ]
+}
