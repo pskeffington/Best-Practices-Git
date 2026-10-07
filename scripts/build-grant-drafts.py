@@ -90,23 +90,52 @@ def review_crosswalk(profile: dict) -> str:
 
 
 def section_requirements(profile: dict) -> str:
+    rows = [
+        "| Section | Required | Page rule | Required signals |",
+        "|---|---|---|---|",
+    ]
+    for section in profile.get("sections", []):
+        required = section.get("required")
+        required_label = "yes" if required is True else str(required)
+        signals = "; ".join(section.get("requiredSignals", []))
+        rows.append(
+            f"| {section['name']} | {required_label} | {section.get('pageRule', '')} | {signals} |"
+        )
+    return "\n".join(rows)
+
+
+def proposal_sections(profile_key: str, profile: dict) -> str:
     blocks: list[str] = []
+
     for section in profile.get("sections", []):
         name = section["name"]
-        rule = section.get("pageRule")
-        signals = section.get("requiredSignals", [])
-        block = [f"### {name}"]
-        if rule:
-            block.append(f"**Page rule:** {rule}")
-        if signals:
-            block.append("**Required signals:** " + "; ".join(signals) + ".")
-        block.append(
-            "Draft this section from verified project evidence and the live funding-opportunity instructions. "
-            "Do not convert missing facts into narrative certainty."
-        )
-        blocks.append("\n\n".join(block))
-    return "\n\n".join(blocks)
 
+        if profile_key.startswith("nih_") and name == "Specific Aims":
+            continue
+        if profile_key == "nsf_research" and name in {"Project Summary", "Broader Impacts"}:
+            continue
+
+        signals = "; ".join(section.get("requiredSignals", []))
+        block = [f"## {name}"]
+        if section.get("pageRule"):
+            block.append(f"**Page rule:** {section['pageRule']}")
+        if signals:
+            block.append(f"**Required signals:** {signals}.")
+        block.append(
+            "[TODO: draft from verified evidence and the live opportunity instructions. "
+            "Replace this instruction with proposal prose before submission.]"
+        )
+
+        if profile_key == "nsf_research" and name == "Project Description":
+            block.append(
+                "### Broader Impacts\n\n"
+                "[TODO: define concrete broader-impact activities, target participants or beneficiaries, "
+                "responsible roles, milestones, and evaluation. Keep this discussion inside the Project Description.]"
+            )
+
+        blocks.append("\n\n".join(block))
+
+    return "\n\n".join(blocks)
 
 def aims_architecture(profile_key: str) -> str:
     if profile_key not in {"nih_rpg_srf", "nih_small_business"}:
