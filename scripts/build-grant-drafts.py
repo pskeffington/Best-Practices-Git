@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build provenance-preserving grant draft packets from reviewed opportunity registries."""
+"""Build provenance-preserving, sponsor-aware grant draft packets."""
 
 from __future__ import annotations
 
@@ -26,6 +26,22 @@ def slug(value: str) -> str:
 def days_old(value: str | None, today: date) -> int | None:
     parsed = parse_date(value)
     return None if parsed is None else (today - parsed).days
+
+
+def infer_profile_key(grant: dict) -> str:
+    combined = " ".join(
+        str(grant.get(key, "")) for key in ("sponsor", "mechanism", "title")
+    ).lower()
+
+    if any(token in combined for token in ("sbir", "sttr", "r41", "r42", "r43", "r44")):
+        return "nih_small_business"
+    if "nsf" in combined or "national science foundation" in combined:
+        return "nsf_research"
+    if "samhsa" in combined:
+        return "samhsa_discretionary"
+    if any(token in combined for token in ("nih", "nimh", "nida", "ninds", "nci", "niaid", "ahrq")):
+        return "nih_rpg_srf"
+    return "generic_research"
 
 
 def eligible(grant: dict, registry: dict, cfg: dict, today: date) -> tuple[bool, list[str]]:
@@ -60,12 +76,118 @@ def eligible(grant: dict, registry: dict, cfg: dict, today: date) -> tuple[bool,
     return (not reasons, reasons)
 
 
-def render(project: str, grant: dict, registry: dict, today: date) -> str:
+def review_crosswalk(profile: dict) -> str:
+    rows = [
+        "| Review factor | Scoring | Primary proposal location | Reviewer question |",
+        "|---|---|---|---|",
+    ]
+    for item in profile.get("reviewFramework", []):
+        maps = ", ".join(item.get("mapsTo", []))
+        rows.append(
+            f"| {item.get('factor', '')} | {item.get('score', '')} | {maps} | {item.get('reviewQuestion', '')} |"
+        )
+    return "\n".join(rows)
+
+
+def section_requirements(profile: dict) -> str:
+    blocks: list[str] = []
+    for section in profile.get("sections", []):
+        name = section["name"]
+        rule = section.get("pageRule")
+        signals = section.get("requiredSignals", [])
+        block = [f"### {name}"]
+        if rule:
+            block.append(f"**Page rule:** {rule}")
+        if signals:
+            block.append("**Required signals:** " + "; ".join(signals) + ".")
+        block.append(
+            "Draft this section from verified project evidence and the live funding-opportunity instructions. "
+            "Do not convert missing facts into narrative certainty."
+        )
+        blocks.append("\n\n".join(block))
+    return "\n\n".join(blocks)
+
+
+def aims_architecture(profile_key: str) -> str:
+    if profile_key not in {"nih_rpg_srf", "nih_small_business"}:
+        return ""
+
+    return """## Specific Aims
+
+**Problem:** [TODO: state the important problem or unmet need in one direct sentence.]
+
+**Gap:** [TODO: state the precise knowledge, implementation, or technical gap that prevents progress.]
+
+**Overall objective:** [TODO: state what this project will accomplish within the award period.]
+
+**Central hypothesis or premise:** [TODO: state the testable hypothesis or defensible premise. If the mechanism is not hypothesis-driven, state the governing premise explicitly.]
+
+### Aim 1 — [TODO: bounded objective]
+
+State the objective, rationale, core method, measurable endpoint, and expected outcome. The aim should remain scientifically useful even if the result is null or the preferred implementation path fails.
+
+### Aim 2 — [TODO: bounded objective]
+
+State the objective, rationale, core method, measurable endpoint, and expected outcome. Do not make this aim depend completely on success of Aim 1.
+
+### Aim 3 — [TODO: bounded objective or omit if unnecessary]
+
+Use only if the scope, budget, and award period support a third aim. Avoid adding an aim merely to make the application look complete.
+
+**Expected outcomes:** [TODO: summarize the concrete scientific, technical, implementation, or access outcomes.]
+
+**Overall impact:** [TODO: explain how completing these aims changes the field, service system, technical capability, or public-health problem.]
+"""
+
+
+def project_summary_architecture(profile_key: str) -> str:
+    if profile_key != "nsf_research":
+        return ""
+    return """## Project Summary
+
+### Overview
+
+[TODO: concise overview of the problem, objectives, and work.]
+
+### Intellectual Merit
+
+[TODO: explain the potential to advance knowledge and the core scientific/technical contribution.]
+
+### Broader Impacts
+
+[TODO: define specific societal/educational/public-benefit activities, target participants or beneficiaries, implementation ownership, and how success will be evaluated.]
+"""
+
+
+def claims_matrix(profile_key: str) -> str:
+    unit = "Aim" if profile_key.startswith("nih_") else "Objective"
+    return f"""## Claims-Aims-Evidence-Risk Matrix
+
+| {unit} | Claim or premise | Existing evidence | Proposed test/work | Risk | Alternative strategy | Deliverable | Budget owner |
+|---|---|---|---|---|---|---|---|
+| {unit} 1 | [TODO] | [TODO: citation/pilot/source] | [TODO] | [LOW/MED/HIGH] | [TODO] | [TODO] | [TODO] |
+| {unit} 2 | [TODO] | [TODO: citation/pilot/source] | [TODO] | [LOW/MED/HIGH] | [TODO] | [TODO] | [TODO] |
+| {unit} 3 | [TODO or omit] | [TODO] | [TODO] | [LOW/MED/HIGH] | [TODO] | [TODO] | [TODO] |
+
+A high-risk row requires either an alternative strategy, a go/no-go milestone, or an explicit justification for accepting the risk.
+"""
+
+
+def render(project: str, grant: dict, registry: dict, today: date, profile_key: str, profile: dict) -> str:
     gates = "\n".join(f"- [ ] {item}" for item in grant.get("gates", []))
     policy = "\n".join(f"- {item}" for item in grant.get("policyNotes", [])) or "- None recorded."
     blockers = "\n".join(f"- [ ] {item}" for item in grant.get("currentBlockers", [])) or "- [ ] Reconcile mechanism-specific blockers with the current source."
     due = grant.get("nextDue") or "Rolling / not currently specified"
     verified = grant.get("lastVerified") or registry.get("updated") or "unknown"
+    writing_rules = "\n".join(f"- {item}" for item in profile.get("writingRules", []))
+    draft_order = " -> ".join(profile.get("draftOrder", []))
+    authoritative = "\n".join(f"- {item}" for item in profile.get("sources", [])) or "- Live opportunity instructions only."
+    sponsor_sections = section_requirements(profile)
+    aims = aims_architecture(profile_key)
+    nsf_summary = project_summary_architecture(profile_key)
+    matrix = claims_matrix(profile_key)
+    crosswalk = review_crosswalk(profile)
+
     return f"""<!-- AUTOGENERATED GRANT DRAFT. Rebuild from source registry; do not hand-edit this file. -->
 
 # {grant["title"]}
@@ -73,6 +195,7 @@ def render(project: str, grant: dict, registry: dict, today: date) -> str:
 **Project:** {project}  
 **Sponsor:** {grant["sponsor"]}  
 **Mechanism:** {grant["mechanism"]}  
+**Sponsor profile:** `{profile_key}`  
 **Strategic fit:** {grant["fitScore"]}/100  
 **Application route:** {grant["applicantRoute"]}  
 **Deadline:** {due}  
@@ -82,7 +205,9 @@ def render(project: str, grant: dict, registry: dict, today: date) -> str:
 
 ## Drafting status
 
-This is a pre-submission drafting packet generated only after the opportunity passed the portfolio freshness, timing, fit, and applicant-route gates. It is not evidence that the project is eligible, that the sponsor will accept the application, or that unresolved partner and institutional requirements have been satisfied.
+This is a pre-submission drafting packet generated only after the opportunity passed portfolio freshness, timing, fit, and applicant-route gates. It is not evidence that the project is eligible, that the sponsor will accept the application, or that unresolved partner and institutional requirements have been satisfied.
+
+The live funding opportunity and current sponsor application instructions override this generated profile.
 
 ## Working project summary
 
@@ -98,41 +223,44 @@ For this mechanism, the working case is:
 
 Before narrative language is promoted into a submission, confirm the legal applicant, principal investigator or project lead, institutional registrations, partner roles, and any mechanism-specific restrictions against the current sponsor instructions.
 
-## Specific aims / objectives scaffold
+## Sponsor-specific proposal architecture
 
-1. Define the measurable access, navigation, implementation, or service-delivery problem addressed by the proposed work.
-2. Implement the bounded technical or programmatic intervention described in the source repository without expanding claims beyond the existing evidence base.
-3. Evaluate feasibility, access, referral quality, implementation outcomes, and other mechanism-appropriate endpoints using a prespecified analysis plan.
+**Profile:** {profile.get("label", profile_key)}  
+**Recommended drafting order:** {draft_order}
 
-> Drafting rule: replace this scaffold with mechanism-specific aims only after the sponsor instructions and project evidence manifest are reconciled.
+### Writing rules
 
-## Significance / need
+{writing_rules}
 
-Use the source repository literature matrix and evidence package to establish the problem, affected population, access gap, current workflow failure, and why the proposed intervention belongs within this sponsor's mission. Every quantitative claim should resolve to a verified citation or project dataset.
+### Profile source controls
 
-## Innovation
+{authoritative}
 
-Describe only defensible innovation already represented in the source repository. Separate technical novelty, implementation novelty, workflow novelty, and research contribution. Do not use routine software development as the primary innovation claim.
+{aims}
+{nsf_summary}
+{matrix}
+## Reviewer crosswalk
 
-## Approach
+{crosswalk}
 
-### Work package 1 — source and workflow definition
-- Lock the implementation setting, population, referral origin, and authoritative source boundaries.
-- Confirm data classes and minimum necessary information.
+Use this crosswalk as a coverage check, not as a substitute for the live NOFO review criteria.
 
-### Work package 2 — implementation
-- Deliver the grant-bounded functionality.
-- Preserve source provenance, freshness controls, safety constraints, and failure-state behavior.
+## Sponsor section requirements
 
-### Work package 3 — evaluation
-- Define primary and secondary outcomes before analysis.
-- Capture implementation and access outcomes rather than vanity engagement metrics.
-- Preserve an auditable analysis path into manuscript-ready tables and figures.
+{sponsor_sections}
 
-### Work package 4 — dissemination and sustainment
-- Produce sponsor reporting artifacts.
-- Route validated results into the manuscript preparation pipeline.
-- Define post-award sustainment, procurement, commercialization, or public-benefit continuation as appropriate.
+## Approach integration rules
+
+For every aim, objective, or work package:
+
+- define the rationale and responsible role;
+- identify the evidence supporting feasibility;
+- specify the method or activity;
+- define measurable endpoints or acceptance criteria;
+- state the expected outcome;
+- identify the major risk;
+- provide an alternative strategy or go/no-go decision rule;
+- map the work to timeline and budget.
 
 ## Required gates
 
@@ -142,22 +270,33 @@ Describe only defensible innovation already represented in the source repository
 
 {blockers}
 
-## Budget frame
+## Budget Alignment
 
 **Current registry value:** {grant["budget"]}  
 **Duration:** {grant["duration"]}
 
-Translate this into personnel, implementation, partner/subaward, evaluation, infrastructure, dissemination, and indirect-cost lines only after current sponsor rules are verified.
+Build the budget from the work plan rather than fitting the work plan to an arbitrary total. Each major activity should map to personnel effort, partner/subaward effort, infrastructure, evaluation, dissemination, or another allowable category. Flag work packages with no budget owner and budget lines with no narrative purpose.
 
-## Human subjects / clinical-trial boundary
+## Human Subjects and Other Required Plans
 
-**Registry classification:** {grant["clinicalTrial"]}
+**Registry clinical-trial classification:** {grant["clinicalTrial"]}
 
-Do not infer exemption, institutional review requirements, or clinical-trial status from this generated packet. Reconcile the current protocol and sponsor definitions before submission.
+Do not infer exemption, institutional-review requirements, clinical-trial status, data-sharing obligations, or other regulatory classifications from this generated packet. Reconcile the current protocol, institutional guidance, and sponsor definitions before submission.
 
 ## Policy and mechanism notes
 
 {policy}
+
+## Evidence and citation controls
+
+Before narrative promotion:
+
+- map quantitative claims to verified citations or project data;
+- map preliminary-data claims to a source artifact;
+- separate literature-supported need from intervention-effectiveness claims;
+- verify that cited evidence is current enough for the claim;
+- do not generate or retain a citation that cannot be resolved to a real source;
+- preserve a source/retrieval date for sponsor rules and funding-opportunity facts.
 
 ## Evidence-to-manuscript handoff
 
@@ -178,39 +317,46 @@ If funded, create a project-specific manuscript branch at award activation rathe
 
 - [ ] Re-open the authoritative opportunity page.
 - [ ] Confirm the opportunity remains active.
-- [ ] Confirm deadline/time zone and submission portal.
+- [ ] Confirm deadline, time zone, and submission portal.
 - [ ] Confirm applicant eligibility and registrations.
 - [ ] Confirm current forms, page limits, review criteria, and attachments.
-- [ ] Reconcile aims, milestones, budget, evaluation endpoints, and partner letters.
-- [ ] Replace every unresolved placeholder or scaffold statement.
-- [ ] Run citation, privacy, statistical, and claim-boundary review.
+- [ ] Confirm sponsor-profile assumptions against the live opportunity.
+- [ ] Reconcile aims/objectives, milestones, budget, evaluation endpoints, and partner letters.
+- [ ] Resolve every placeholder and blocker.
+- [ ] Run `scripts/grant_lint.py`.
+- [ ] Run citation, privacy, statistical, budget, and claim-boundary review.
+- [ ] Run a final reviewer-style critique using the actual scored review criteria.
 """
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="grants/pipeline-config.json")
+    parser.add_argument("--profiles", default="grants/sponsor-profiles.json")
     parser.add_argument("--registry", action="append", default=[], help="project=path")
     parser.add_argument("--output", default="grants/generated")
     args = parser.parse_args()
 
-    cfg = json.loads(Path(args.config).read_text())
+    cfg = json.loads(Path(args.config).read_text(encoding="utf-8"))
+    profile_data = json.loads(Path(args.profiles).read_text(encoding="utf-8"))
+    profiles = profile_data["profiles"]
     today = datetime.now(timezone.utc).date()
     out_root = Path(args.output)
     out_root.mkdir(parents=True, exist_ok=True)
 
     index = {
-        "schemaVersion": "grant-draft-index.v1",
+        "schemaVersion": "grant-draft-index.v2",
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "draftThreshold": cfg["draftThreshold"],
         "freshnessDays": cfg["freshnessDays"],
+        "profileVersion": profile_data.get("schemaVersion"),
         "drafts": [],
         "held": [],
     }
 
     for item in args.registry:
         project, path = item.split("=", 1)
-        registry = json.loads(Path(path).read_text())
+        registry = json.loads(Path(path).read_text(encoding="utf-8"))
         reg_age = days_old(registry.get("updated"), today)
         if reg_age is None or reg_age > int(cfg["freshnessDays"]):
             raise SystemExit(f"{project}: registry is missing a current review date")
@@ -220,6 +366,11 @@ def main() -> int:
 
         for grant in registry.get("opportunities", []):
             ok, reasons = eligible(grant, registry, cfg, today)
+            profile_key = grant.get("sponsorProfile") or infer_profile_key(grant)
+            if profile_key not in profiles:
+                reasons.append(f"unknown sponsor profile: {profile_key}")
+                ok = False
+
             record = {
                 "project": project,
                 "id": grant.get("id"),
@@ -228,14 +379,19 @@ def main() -> int:
                 "status": grant.get("status"),
                 "source": grant.get("source"),
                 "nextDue": grant.get("nextDue"),
+                "sponsorProfile": profile_key,
             }
+
             if not ok:
                 record["reasons"] = reasons
                 index["held"].append(record)
                 continue
 
             target = project_dir / f"{slug(grant['id'])}.md"
-            target.write_text(render(project, grant, registry, today), encoding="utf-8")
+            target.write_text(
+                render(project, grant, registry, today, profile_key, profiles[profile_key]),
+                encoding="utf-8",
+            )
             record["path"] = str(target)
             index["drafts"].append(record)
 
