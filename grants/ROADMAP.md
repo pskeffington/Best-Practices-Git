@@ -18,11 +18,11 @@ A polished draft alone never satisfies a gate.
 
 ## Current system status
 
-**Overall:** **G7 PASS / G8 NEXT**
+**Overall:** **G8 IN PROGRESS / G8.3 NEXT**
 
 Current automated path:
 
-`opportunity registry -> freshness gate -> sponsor profile -> proposal architecture -> draft packet -> deterministic lint -> review PR`
+`opportunity registry -> freshness gate -> sponsor profile -> proposal architecture -> draft packet -> deterministic lint -> specialist review packets -> review PR`
 
 Current human-controlled path:
 
@@ -344,11 +344,36 @@ Catch structural problems before expensive or subjective review.
 
 # G8 — Specialist automated review
 
-**Status:** NEXT
+**Status:** IN PROGRESS — REVIEW CONTRACT + PACKET/AGGREGATION RUNNERS COMPLETE
 
 ## Objective
 
 Add independent reviewer passes that critique the draft from distinct perspectives rather than using one generic review prompt.
+
+## Completed
+
+- [x] machine-readable reviewer result schema;
+- [x] severity taxonomy;
+- [x] PASS / REVISE / HOLD contract;
+- [x] nine specialist reviewer profiles;
+- [x] immutable draft SHA-256 in review packets;
+- [x] review packet generator;
+- [x] scheduled review-packet artifact generation;
+- [x] structured review-result validator;
+- [x] same-draft / same-profile aggregation guard;
+- [x] duplicate-reviewer detection;
+- [x] missing-reviewer detection;
+- [x] consolidated Markdown + JSON synthesis.
+
+## Remaining
+
+- [ ] **G8.3 model/provider invocation adapter**;
+- [ ] record model/provider/version and prompt/response hashes;
+- [ ] retry/error policy;
+- [ ] panel reviewer runs only after focused review set is complete;
+- [ ] automatic CI ingestion of reviewer JSON outputs;
+- [ ] criterion-coverage threshold by sponsor profile;
+- [ ] cost/token telemetry where supported.
 
 ## Required review agents / passes
 
@@ -629,7 +654,7 @@ Ensure the grant becomes the first controlled artifact in the research/manuscrip
 | M4 Aims architecture | G5 | PARTIAL PASS | structured narrative generation |
 | M5 Draft compiler | G6 | PASS | reproducible proposal packets |
 | M6 Deterministic QA | G7 | PASS | safe automated review entry |
-| M7 Specialist review | G8 | NEXT | machine-assisted critique |
+| M7 Specialist review | G8 | IN PROGRESS | review contract/queue active; model execution next |
 | M8 Revision engine | G9 | NOT STARTED | iterative improvement |
 | M9 Budget/timeline compiler | G10 | NOT STARTED | full application coherence |
 | M10 Submission assembler | G11 | NOT STARTED | sponsor-ready attachment package |
@@ -641,20 +666,18 @@ Ensure the grant becomes the first controlled artifact in the research/manuscrip
 
 Priority order:
 
-1. **G8.1 — reviewer schema**
-   - define machine-readable finding format;
-   - severity taxonomy;
-   - PASS / REVISE / HOLD decision contract.
+1. **G8.3 — model/provider review adapter**
+   - invoke one specialist packet at a time;
+   - require structured JSON output;
+   - record provider/model/version;
+   - record packet and response hashes;
+   - enforce focused-review completion before panel synthesis.
 
-2. **G8.2 — specialist review runners**
-   - aims;
-   - significance;
-   - innovation;
-   - methods/feasibility;
-   - citation/evidence;
-   - budget/timeline/team;
-   - readability;
-   - panel synthesis.
+2. **G8.4 — CI review ingestion**
+   - validate specialist results;
+   - aggregate reviewer findings;
+   - expose PASS / REVISE / HOLD in generated PR;
+   - block promotion on critical/HOLD findings.
 
 3. **G4.1 — evidence manifest**
    - structured evidence object;
