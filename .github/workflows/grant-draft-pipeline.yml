@@ -45,6 +45,20 @@ jobs:
             --profiles grants/sponsor-profiles.json \
             --json-out grants/generated/lint-report.json
 
+      - name: Build specialist review packets
+        run: |
+          rm -rf artifacts/grant-review-packets
+          python scripts/build-grant-review-packets.py grants/generated \
+            --reviewers grants/reviewer-profiles.json \
+            --output artifacts/grant-review-packets
+
+      - name: Upload specialist review queue
+        uses: actions/upload-artifact@v4
+        with:
+          name: grant-review-packets
+          path: artifacts/grant-review-packets
+          if-no-files-found: error
+
       - name: Create review branch and pull request
         run: |
           if git diff --quiet -- grants/generated; then
