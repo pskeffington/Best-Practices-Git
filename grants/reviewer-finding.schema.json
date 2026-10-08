@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://best-practices.local/grants/reviewer-finding.schema.json",
+  "title": "Grant Review Result",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "reviewerId",
+    "reviewerLabel",
+    "draftPath",
+    "sponsorProfile",
+    "decision",
+    "confidence",
+    "summary",
+    "findings"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "grant-review-result.v1"
+    },
+    "reviewerId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewerLabel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "draftPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "draftSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sponsorProfile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": ["PASS", "REVISE", "HOLD"]
+    },
+    "confidence": {
+      "enum": ["high", "medium", "low"]
+    },
+    "criterionCoverage": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": [
+        "id",
+        "severity",
+        "category",
+        "evidenceAnchor",
+        "problem",
+        "reviewerImpact",
+        "recommendedRevision",
+        "verificationMethod",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_-]+$"
+        },
+        "severity": {
+          "enum": ["critical", "high", "medium", "low", "info"]
+        },
+        "category": {
+          "enum": [
+            "eligibility",
+            "compliance",
+            "aims",
+            "significance",
+            "innovation",
+            "methods",
+            "rigor",
+            "feasibility",
+            "citations",
+            "evidence",
+            "budget",
+            "timeline",
+            "team",
+            "readability",
+            "review-criteria",
+            "other"
+          ]
+        },
+        "reviewCriterion": {
+          "type": ["string", "null"]
+        },
+        "evidenceAnchor": {
+          "type": "object",
+          "required": ["section"],
+          "properties": {
+            "section": {
+              "type": "string",
+              "minLength": 1
+            },
+            "quoteOrLocator": {
+              "type": ["string", "null"]
+            }
+          }
+        },
+        "problem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewerImpact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recommendedRevision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verificationMethod": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fundingConstraintNote": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "enum": ["open", "resolved", "accepted-risk"]
+        }
+      }
+    }
+  }
+}

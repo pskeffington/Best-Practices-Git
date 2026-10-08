@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "grant-pipeline-config.v2",
+  "updated": "2026-10-08",
+  "freshnessDays": 14,
+  "draftThreshold": 85,
+  "allowedStatuses": [
+    "target-now",
+    "next-cycle",
+    "partner-led"
+  ],
+  "sponsorProfiles": "grants/sponsor-profiles.json",
+  "lint": {
+    "script": "scripts/grant_lint.py",
+    "report": "grants/generated/lint-report.json",
+    "failOnWarnings": false
+  },
+  "sources": [
+    {
+      "project": "mh.institute",
+      "repository": "pskeffington/mh.institute",
+      "path": "data/grants/opportunities.json"
+    },
+    {
+      "project": "gaming.institute",
+      "repository": "pskeffington/gaming.institute",
+      "path": "data/grants/opportunities.json"
+    }
+  ],
+  "review": {
+    "reviewerProfiles": "grants/reviewer-profiles.json",
+    "findingSchema": "grants/reviewer-finding.schema.json",
+    "packetBuilder": "scripts/build-grant-review-packets.py",
+    "aggregator": "scripts/aggregate-grant-reviews.py",
+    "decisionStates": [
+      "PASS",
+      "REVISE",
+      "HOLD"
+    ],
+    "requireCompletePanelBeforePass": true
+  }
+}

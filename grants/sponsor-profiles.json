@@ -1,0 +1,314 @@
+{
+  "schemaVersion": "grant-sponsor-profiles.v1",
+  "updated": "2026-10-07",
+  "precedenceRule": "The live funding opportunity and current agency application guide always override this repository.",
+  "profiles": {
+    "nih_rpg_srf": {
+      "label": "NIH Research Project Grant — Simplified Review Framework",
+      "agencyFamily": "NIH",
+      "appliesTo": ["R01", "R03", "R15", "R16", "R21", "R33", "R34", "R36", "R61", "U01", "U34", "UG3", "UH2", "UH3"],
+      "draftOrder": [
+        "Specific Aims",
+        "Significance",
+        "Innovation",
+        "Approach",
+        "Expertise and Resources",
+        "Budget Alignment",
+        "Human Subjects and Other Required Plans"
+      ],
+      "sections": [
+        {
+          "name": "Specific Aims",
+          "required": true,
+          "pageRule": "Usually 1 page unless the NOFO says otherwise.",
+          "requiredSignals": ["problem", "knowledge gap", "overall objective", "central hypothesis or premise", "2-4 bounded aims", "expected outcomes", "overall impact"]
+        },
+        {
+          "name": "Significance",
+          "required": true,
+          "requiredSignals": ["important problem or barrier", "scientific premise", "current gap", "why closing the gap matters"]
+        },
+        {
+          "name": "Innovation",
+          "required": true,
+          "requiredSignals": ["conceptual, technical, methodological, implementation, or use-of-existing-methods innovation", "why the innovation changes expected impact"]
+        },
+        {
+          "name": "Approach",
+          "required": true,
+          "requiredSignals": ["design by aim", "analysis plan", "rigor", "feasibility", "milestones", "risks", "alternative strategies", "expected outcomes"]
+        },
+        {
+          "name": "Expertise and Resources",
+          "required": true,
+          "requiredSignals": ["role-to-expertise mapping", "environment/resources needed for proposed work", "explicit gap closure when expertise or resources are missing"]
+        }
+      ],
+      "reviewFramework": [
+        {
+          "factor": "Factor 1 — Importance of the Research",
+          "score": "1-9",
+          "mapsTo": ["Significance", "Innovation"],
+          "reviewQuestion": "Should the proposed research be conducted?"
+        },
+        {
+          "factor": "Factor 2 — Rigor and Feasibility",
+          "score": "1-9",
+          "mapsTo": ["Approach"],
+          "reviewQuestion": "Can the proposed research be conducted well?"
+        },
+        {
+          "factor": "Factor 3 — Expertise and Resources",
+          "score": "sufficiency",
+          "mapsTo": ["Investigators", "Environment"],
+          "reviewQuestion": "Are the expertise and resources in place to do it?"
+        }
+      ],
+      "writingRules": [
+        "Draft Specific Aims early and use it as the controlling architecture for the rest of the application.",
+        "Do not write aims as a list of experiments; each aim should state a bounded objective and expected contribution.",
+        "Make the scientific gap and expected impact explicit before introducing detailed methods.",
+        "Tie risks and alternative strategies to each aim rather than placing generic contingency language at the end.",
+        "Keep budget, personnel effort, milestones, and approach internally consistent.",
+        "Write titles, abstracts, and public-health relevance statements in plain language for a broad educated audience.",
+        "Treat the live NOFO, FORMS-I instructions, and NIH Guide notices as authoritative."
+      ],
+      "sources": [
+        "https://grants.nih.gov/grants-process/write-application/advice-on-application-sections",
+        "https://grants.nih.gov/grants-process/write-application/general-grant-writing-tips",
+        "https://www.grants.nih.gov/policy-and-compliance/policy-topics/peer-review/simplifying-review/framework",
+        "https://grants.nih.gov/grants-process/write-application/how-to-apply-application-guide"
+      ]
+    },
+    "nih_small_business": {
+      "label": "NIH SBIR/STTR",
+      "agencyFamily": "NIH",
+      "appliesTo": ["R41", "R42", "R43", "R44", "SBIR", "STTR"],
+      "draftOrder": [
+        "Specific Aims",
+        "Significance",
+        "Innovation",
+        "Approach",
+        "Technical Milestones",
+        "Commercialization and Adoption",
+        "Team and Workshare",
+        "Budget Alignment",
+        "Human Subjects and Other Required Plans"
+      ],
+      "sections": [
+        {
+          "name": "Specific Aims",
+          "required": true,
+          "requiredSignals": ["problem", "unmet need", "technical objective", "phase-appropriate aims", "measurable outcomes", "impact"]
+        },
+        {
+          "name": "Research Strategy",
+          "required": true,
+          "requiredSignals": ["significance", "innovation", "approach", "technical risk", "milestones", "go/no-go logic"]
+        },
+        {
+          "name": "Commercialization and Adoption",
+          "required": true,
+          "requiredSignals": ["customer or user", "market/use setting", "adoption barrier", "competitive alternative", "follow-on financing or procurement path"]
+        },
+        {
+          "name": "Team and Workshare",
+          "required": true,
+          "requiredSignals": ["small-business role", "PI role", "research-institution role when STTR", "subaward/workshare logic"]
+        }
+      ],
+      "reviewFramework": [
+        {
+          "factor": "Scientific and technical merit",
+          "score": "mechanism-specific",
+          "mapsTo": ["Significance", "Innovation", "Approach", "Investigators", "Environment"],
+          "reviewQuestion": "Is the R&D important, feasible, and appropriate for the small-business mechanism?"
+        },
+        {
+          "factor": "Commercialization potential",
+          "score": "mechanism-specific",
+          "mapsTo": ["Commercialization and Adoption"],
+          "reviewQuestion": "Can the proposed R&D plausibly translate into a usable, sustainable product or service?"
+        }
+      ],
+      "writingRules": [
+        "Separate research and development risk from routine product implementation.",
+        "Make Phase I or early-phase milestones objective and measurable.",
+        "Do not treat commercialization as a generic market-size paragraph; connect technical success to a defined customer, purchaser, or implementation route.",
+        "For STTR, reconcile workshare and research-institution responsibilities before narrative drafting.",
+        "Verify current small-business eligibility, registrations, budget limits, and solicitation-specific instructions before submission."
+      ],
+      "sources": [
+        "https://grants.nih.gov/grants-process/write-application/how-to-apply-application-guide",
+        "https://seed.nih.gov/small-business-funding/how-to-apply"
+      ]
+    },
+    "nsf_research": {
+      "label": "NSF Research Proposal",
+      "agencyFamily": "NSF",
+      "appliesTo": ["NSF", "CAREER", "EAGER", "RAPID"],
+      "draftOrder": [
+        "Project Summary",
+        "Project Description",
+        "Intellectual Merit",
+        "Broader Impacts",
+        "Results from Prior NSF Support",
+        "Management and Timeline",
+        "References Cited",
+        "Budget Justification",
+        "Facilities and Resources",
+        "Data Management and Sharing Plan",
+        "Mentoring Plan when required"
+      ],
+      "sections": [
+        {
+          "name": "Project Summary",
+          "required": true,
+          "pageRule": "1 page under current general NSF guidance.",
+          "requiredSignals": ["overview", "intellectual merit", "broader impacts"]
+        },
+        {
+          "name": "Project Description",
+          "required": true,
+          "pageRule": "Typically 15 pages under current general NSF guidance; solicitation-specific rules prevail.",
+          "requiredSignals": ["objectives", "state of knowledge", "work plan", "methods", "success criteria", "benefits"]
+        },
+        {
+          "name": "Broader Impacts",
+          "required": true,
+          "requiredSignals": ["specific activities", "target participants or beneficiaries", "implementation mechanism", "evaluation or evidence of success"]
+        },
+        {
+          "name": "Results from Prior NSF Support",
+          "required": "conditional",
+          "requiredSignals": ["prior award", "intellectual merit", "broader impacts", "publications/products", "relationship to proposed work"]
+        }
+      ],
+      "reviewFramework": [
+        {
+          "factor": "Intellectual Merit",
+          "score": "merit review",
+          "mapsTo": ["Project Summary", "Project Description"],
+          "reviewQuestion": "What is the potential to advance knowledge?"
+        },
+        {
+          "factor": "Broader Impacts",
+          "score": "merit review",
+          "mapsTo": ["Project Summary", "Project Description", "Broader Impacts"],
+          "reviewQuestion": "What is the potential to benefit society and contribute to desired societal outcomes?"
+        }
+      ],
+      "writingRules": [
+        "State what will be done, why it matters, how it will be done, how success will be known, and what benefits may follow.",
+        "Treat Broader Impacts as an executable workstream with beneficiaries, activities, ownership, milestones, and evaluation rather than generic benefit language.",
+        "Keep Results from Prior NSF Support distinct and current when required.",
+        "Prepare senior/key personnel documents and other Research.gov components outside the narrative compiler when required by NSF systems.",
+        "Verify the current PAPPG, supplements, and solicitation because NSF policy is undergoing revision."
+      ],
+      "sources": [
+        "https://www.nsf.gov/policies/pappg",
+        "https://www.nsf.gov/funding/preparing-proposal",
+        "https://www.nsf.gov/policies/pappg/24-1/ch-2-proposal-preparation"
+      ]
+    },
+    "samhsa_discretionary": {
+      "label": "SAMHSA Discretionary Grant",
+      "agencyFamily": "SAMHSA",
+      "appliesTo": ["SAMHSA"],
+      "draftOrder": [
+        "Project Narrative using NOFO headings",
+        "Population and Need",
+        "Proposed Approach",
+        "Implementation and Staffing",
+        "Data Collection and Performance Measurement",
+        "Evaluation",
+        "Sustainability",
+        "Budget and Budget Narrative",
+        "Required Attachments"
+      ],
+      "sections": [
+        {
+          "name": "Project Narrative",
+          "required": true,
+          "requiredSignals": ["NOFO-specific headings", "need", "population", "approach", "implementation", "performance measurement", "organizational capability"]
+        },
+        {
+          "name": "Budget Narrative",
+          "required": true,
+          "requiredSignals": ["federal costs", "non-federal costs when applicable", "object-class categories", "cost-to-activity justification"]
+        }
+      ],
+      "reviewFramework": [
+        {
+          "factor": "NOFO review criteria",
+          "score": "points defined by NOFO",
+          "mapsTo": ["Project Narrative", "Budget Narrative", "Attachments"],
+          "reviewQuestion": "Does each scored criterion have an explicit, easy-to-find response?"
+        }
+      ],
+      "writingRules": [
+        "Use the exact NOFO section headings and scoring order whenever possible.",
+        "Build a requirement-to-section crosswalk before drafting prose.",
+        "Map every budget line to a proposed activity, staffing requirement, or deliverable.",
+        "Use performance measures and implementation milestones that can be reported during the award.",
+        "Do not assume forms or attachments from an older SAMHSA cycle remain current."
+      ],
+      "sources": [
+        "https://www.samhsa.gov/grants/how-to-apply/forms-and-resources"
+      ]
+    },
+    "generic_research": {
+      "label": "Generic Research / Foundation Proposal",
+      "agencyFamily": "GENERIC",
+      "appliesTo": ["GENERIC"],
+      "draftOrder": [
+        "Executive Summary or Letter of Intent",
+        "Need or Significance",
+        "Objectives",
+        "Approach",
+        "Evaluation",
+        "Team and Organizational Capability",
+        "Timeline and Milestones",
+        "Budget and Budget Narrative",
+        "Sustainability and Dissemination"
+      ],
+      "sections": [
+        {
+          "name": "Need or Significance",
+          "required": true,
+          "requiredSignals": ["problem", "evidence", "gap", "beneficiary or scientific importance"]
+        },
+        {
+          "name": "Objectives",
+          "required": true,
+          "requiredSignals": ["specific objectives", "measurable outcomes"]
+        },
+        {
+          "name": "Approach",
+          "required": true,
+          "requiredSignals": ["activities", "methods", "responsible roles", "timeline", "risks"]
+        },
+        {
+          "name": "Evaluation",
+          "required": true,
+          "requiredSignals": ["process measures", "outcome measures", "data source", "analysis or interpretation plan"]
+        }
+      ],
+      "reviewFramework": [
+        {
+          "factor": "Funder fit",
+          "score": "funder-specific",
+          "mapsTo": ["all"],
+          "reviewQuestion": "Does the proposal answer the funder's stated priorities and review criteria directly?"
+        }
+      ],
+      "writingRules": [
+        "Create a scored-criteria crosswalk before drafting.",
+        "Separate evidence of need from claims about intervention effectiveness.",
+        "Use measurable objectives and tie each to activities, responsible roles, timing, evaluation, and budget.",
+        "Treat the funder's live instructions as authoritative."
+      ],
+      "sources": []
+    }
+  }
+}

@@ -1,0 +1,81 @@
+name: Grant Draft Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 12 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-grant-drafts:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PORTFOLIO_GRANT_READ_TOKEN || github.token }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch reviewed grant registries
+        run: |
+          mkdir -p .grant-input
+          gh api "repos/pskeffington/mh.institute/contents/data/grants/opportunities.json?ref=main" \
+            -H "Accept: application/vnd.github.raw+json" \
+            > .grant-input/mh.institute.json
+          gh api "repos/pskeffington/gaming.institute/contents/data/grants/opportunities.json?ref=main" \
+            -H "Accept: application/vnd.github.raw+json" \
+            > .grant-input/gaming.institute.json
+
+      - name: Build sponsor-aware draft packets
+        run: |
+          python scripts/build-grant-drafts.py \
+            --profiles grants/sponsor-profiles.json \
+            --registry mh.institute=.grant-input/mh.institute.json \
+            --registry gaming.institute=.grant-input/gaming.institute.json
+
+      - name: Lint generated proposal packets
+        run: |
+          python scripts/grant_lint.py grants/generated \
+            --profiles grants/sponsor-profiles.json \
+            --json-out grants/generated/lint-report.json
+
+      - name: Build specialist review packets
+        run: |
+          rm -rf artifacts/grant-review-packets
+          python scripts/build-grant-review-packets.py grants/generated \
+            --reviewers grants/reviewer-profiles.json \
+            --output artifacts/grant-review-packets
+
+      - name: Upload specialist review queue
+        uses: actions/upload-artifact@v4
+        with:
+          name: grant-review-packets
+          path: artifacts/grant-review-packets
+          if-no-files-found: error
+
+      - name: Create review branch and pull request
+        run: |
+          if git diff --quiet -- grants/generated; then
+            echo "No generated grant changes."
+            exit 0
+          fi
+
+          branch="automation/grant-drafts-${GITHUB_RUN_ID}"
+          git config user.name "grant-pipeline[bot]"
+          git config user.email "grant-pipeline[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add grants/generated
+          git commit -m "grants: refresh sponsor-aware draft packets"
+          git push origin "$branch"
+
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "grants: refresh sponsor-aware auto-draft queue" \
+            --body "Automated grant drafting refresh. Drafts are generated only from source registries that pass freshness, deadline, fit, applicant-route, and hold gates. Sponsor profiles define proposal architecture and review criteria. A deterministic lint report is included. Human review is required before submission use."
