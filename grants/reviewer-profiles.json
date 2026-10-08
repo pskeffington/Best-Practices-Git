@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "grant-reviewer-profiles.v1",
+  "updated": "2026-10-08",
+  "decisionPolicy": {
+    "HOLD": "Any unresolved critical finding, unresolved eligibility/compliance failure, fabricated/unverifiable evidence, or material scientific/regulatory uncertainty.",
+    "REVISE": "No HOLD condition, but one or more high/medium findings or material reviewer-criteria gaps remain.",
+    "PASS": "No critical/high findings, required criteria are covered, and remaining findings are low/info only."
+  },
+  "reviewers": [
+    {
+      "id": "R1_COMPLIANCE",
+      "label": "Eligibility and Compliance Reviewer",
+      "categories": ["eligibility", "compliance", "review-criteria"],
+      "focus": [
+        "live opportunity consistency",
+        "applicant route",
+        "required sections",
+        "page and attachment boundaries",
+        "registrations and external gates",
+        "submission blockers"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "R2_AIMS",
+      "label": "Aims and Objectives Reviewer",
+      "categories": ["aims", "feasibility", "review-criteria"],
+      "focus": [
+        "problem-gap-objective-premise chain",
+        "aim independence",
+        "measurable endpoints",
+        "scope",
+        "expected outcomes",
+        "impact"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "R3_SIGNIFICANCE",
+      "label": "Significance and Literature Reviewer",
+      "categories": ["significance", "citations", "evidence"],
+      "focus": [
+        "importance of problem",
+        "state of evidence",
+        "gap precision",
+        "sponsor mission fit",
+        "unsupported burden or effect claims"
+      ],
+      "blocking": false
+    },
+    {
+      "id": "R4_INNOVATION",
+      "label": "Innovation Reviewer",
+      "categories": ["innovation", "review-criteria"],
+      "focus": [
+        "baseline/current practice",
+        "novel contribution",
+        "routine engineering versus real innovation",
+        "connection between innovation and expected impact"
+      ],
+      "blocking": false
+    },
+    {
+      "id": "R5_METHODS",
+      "label": "Methods, Rigor, and Feasibility Reviewer",
+      "categories": ["methods", "rigor", "feasibility", "timeline"],
+      "focus": [
+        "design",
+        "population/data/source",
+        "endpoints",
+        "analysis",
+        "milestones",
+        "risk",
+        "alternative strategies",
+        "feasibility evidence"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "R6_EVIDENCE",
+      "label": "Citation and Evidence Reviewer",
+      "categories": ["citations", "evidence"],
+      "focus": [
+        "claim-to-source traceability",
+        "preliminary data provenance",
+        "source recency",
+        "citation scope",
+        "fabricated or unresolved references"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "R7_OPERATIONS",
+      "label": "Budget, Timeline, and Team Reviewer",
+      "categories": ["budget", "timeline", "team", "feasibility"],
+      "focus": [
+        "work-to-budget mapping",
+        "effort ownership",
+        "partner scope",
+        "award-period consistency",
+        "deliverables and milestones"
+      ],
+      "blocking": false
+    },
+    {
+      "id": "R8_READABILITY",
+      "label": "Readability and Reviewer Navigation Reviewer",
+      "categories": ["readability", "review-criteria"],
+      "focus": [
+        "plain language",
+        "terminology consistency",
+        "topic sentences",
+        "section discoverability",
+        "acronym control",
+        "reviewer cognitive load"
+      ],
+      "blocking": false
+    },
+    {
+      "id": "R9_PANEL",
+      "label": "Final Panel Synthesis Reviewer",
+      "categories": ["review-criteria", "other"],
+      "focus": [
+        "overall competitiveness",
+        "single biggest weakness",
+        "criterion coverage",
+        "cross-section consistency",
+        "panel-level PASS/REVISE/HOLD"
+      ],
+      "blocking": true,
+      "runsAfter": [
+        "R1_COMPLIANCE",
+        "R2_AIMS",
+        "R3_SIGNIFICANCE",
+        "R4_INNOVATION",
+        "R5_METHODS",
+        "R6_EVIDENCE",
+        "R7_OPERATIONS",
+        "R8_READABILITY"
+      ]
+    }
+  ]
+}
