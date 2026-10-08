@@ -179,6 +179,8 @@ def main() -> int:
     args = parser.parse_args()
 
     reviewer_data = load(Path(args.reviewers))
+    known_reviewers = {item["id"]: item for item in reviewer_data["reviewers"]}
+    expected_ids = set(known_reviewers)
     blocking_ids = {
         item["id"] for item in reviewer_data["reviewers"] if item.get("blocking")
     }
@@ -190,11 +192,35 @@ def main() -> int:
     for path in result_paths:
         result = load(path)
         errors = basic_validate(result)
+        if result.get("reviewerId") not in known_reviewers:
+            errors.append(f"unknown reviewerId: {result.get('reviewerId')}")
+
         if errors:
             validation_errors.append({"path": str(path), "errors": errors})
         else:
             result["_path"] = str(path)
             results.append(result)
+
+    seen_reviewers: set[str] = set()
+    for result in results:
+        reviewer_id = result["reviewerId"]
+        if reviewer_id in seen_reviewers:
+            validation_errors.append({
+                "path": result["_path"],
+                "errors": [f"duplicate reviewer result: {reviewer_id}"],
+            })
+        seen_reviewers.add(reviewer_id)
+
+    draft_paths = {result.get("draftPath") for result in results}
+    draft_hashes = {result.get("draftSha256") for result in results if result.get("draftSha256")}
+    sponsor_profiles = {result.get("sponsorProfile") for result in results}
+
+    if len(draft_paths) > 1:
+        validation_errors.append({"path": args.results, "errors": ["review set spans multiple draftPath values"]})
+    if len(draft_hashes) > 1:
+        validation_errors.append({"path": args.results, "errors": ["review set spans multiple draft SHA-256 values"]})
+    if len(sponsor_profiles) > 1:
+        validation_errors.append({"path": args.results, "errors": ["review set spans multiple sponsor profiles"]})
 
     if validation_errors:
         print(json.dumps({"valid": False, "validationErrors": validation_errors}, indent=2))
@@ -220,7 +246,10 @@ def main() -> int:
         key=lambda item: (-SEVERITY_RANK[item["severity"]], item["reviewerId"], item["id"])
     )
 
+    missing_reviewers = sorted(expected_ids - seen_reviewers)
     decision = derive_decision(results, blocking_ids)
+    if missing_reviewers and decision == "PASS":
+        decision = "REVISE"
 
     summary = {
         "schemaVersion": "grant-review-synthesis.v1",
@@ -229,6 +258,12 @@ def main() -> int:
         "openFindingCount": len(open_findings),
         "severityCounts": severity_counts,
         "blockingReviewerIds": sorted(blocking_ids),
+        "expectedReviewerIds": sorted(expected_ids),
+        "missingReviewerIds": missing_reviewers,
+        "completePanel": not missing_reviewers,
+        "draftPath": next(iter(draft_paths)) if draft_paths else None,
+        "draftSha256": next(iter(draft_hashes)) if draft_hashes else None,
+        "sponsorProfile": next(iter(sponsor_profiles)) if sponsor_profiles else None,
         "reviews": [
             {
                 "reviewerId": r["reviewerId"],
