@@ -115,7 +115,7 @@ def gather_drafts(target: Path) -> list[Path]:
         return [target]
     return sorted(
         p for p in target.rglob("*.md")
-        if "review-packets" not in p.parts and p.name.lower() != "readme.md"
+        if "review-packets" not in p.parts and p.name.lower() not in {"readme.md", "review-synthesis.md"}
     )
 
 
