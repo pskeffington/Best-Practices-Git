@@ -21,3 +21,17 @@ For every public figure or result, record the generating script, code revision, 
 ## Repository responsibilities
 
 Keep this repository focused on reusable practices. Store project-specific cohorts, methods and results in the appropriate project repository. Apply platform-native secret scanning, repository branch protection and independently reviewed release permissions where required.
+
+
+## Run the executable validation gate
+
+Install this repository's package in a Python environment, then inspect a new research project:
+
+```bash
+python -m pip install -e .
+python scripts/check_scaffold.py /path/to/research-project --output artifacts/scaffold-audit.json
+```
+
+The command exits nonzero when required scaffold documents are missing, a symlink is present, or a selected potentially sensitive filename is found. The JSON evidence report carries the `bpg-scaffold-check-v1` schema, an `ok` flag, `missing` paths, and `blocked_paths`. Avoid uploading evidence reports that reveal private directory names. Filename screening is a first-pass check, not a content-based secret scanner or compliance certification.
+
+For this repository, run `python -m pytest -q tests/test_scaffold_validation.py` to validate positive, negative, sensitive-name, symlink and template-contract behavior.
