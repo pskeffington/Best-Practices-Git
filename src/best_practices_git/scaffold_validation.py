@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+import fnmatch
 
 REQUIRED = ("README.md", "docs/protocol.md", "docs/data_dictionary.md", "docs/source_register.md")
 BLOCKED_NAMES = {".env", "id_rsa", "credentials.json", "patient_records.csv"}
+BLOCKED_PATTERNS = (".env.*", "*.pem", "*.p12", "*.pfx", "*_private_key", "patient_records*.csv")
+EXCLUDED_DIRS = {".git", ".venv", "venv", "__pycache__"}
 
 def validate_scaffold(root: Path) -> dict:
     """Return a compact report; never open or emit sensitive file contents."""
@@ -15,8 +18,8 @@ def validate_scaffold(root: Path) -> dict:
     blocked = []
     for candidate in root.rglob("*"):
         rel = candidate.relative_to(root)
-        if any(part in {".git", ".venv", "venv", "__pycache__"} for part in rel.parts):
+        if any(part in EXCLUDED_DIRS for part in rel.parts):
             continue
-        if candidate.is_symlink() or (candidate.is_file() and candidate.name.lower() in BLOCKED_NAMES):
+        if candidate.is_symlink() or (candidate.is_file() and (candidate.name.lower() in BLOCKED_NAMES or any(fnmatch.fnmatchcase(candidate.name.lower(), pattern) for pattern in BLOCKED_PATTERNS))):
             blocked.append(str(rel))
     return {"ok": not missing and not blocked, "missing": missing, "blocked_paths": sorted(blocked)}
