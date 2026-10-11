@@ -27,6 +27,9 @@ jobs:
       - name: Run tests
         run: pytest
 
+      - name: Run scaffold validation regression tests
+        run: python -m pytest -q tests/test_scaffold_validation.py
+
       - name: Check workflow CLI
         run: bpg-workflow status
 
