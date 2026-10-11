@@ -36,6 +36,8 @@ research question / protocol
 
 A successful build means the code ran. Scientific acceptance separately requires appropriate design, accurate denominators and units, reproducible methods, representative evaluation, and bounded interpretation.
 
+**Reusable starting materials:** [biomedical research README template](templates/biomedical-research/README.template.md) · [scaffold implementation guide](docs/SCAFFOLD_IMPLEMENTATION_GUIDE.md) · [research release gates](checklists/research-release-gates.md).
+
 ## 1. Scaffold with intent
 
 The initial repository structure should let a new collaborator answer five questions without reverse-engineering the code: *What problem is being studied? Which data may I use? How do I run the analysis? How is correctness checked? Where are results explained?*
