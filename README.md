@@ -17,6 +17,7 @@ The organizing principle is **traceability from question to claim**: a scientifi
 | Release a web application or research service | [4. Deploy in stages](#4-deploy-in-stages) |
 | Build biomedical ML with reproducible evidence | [5. Connect the software lifecycle to the scientific lifecycle](#5-connect-the-software-lifecycle-to-the-scientific-lifecycle) |
 | Find peer-reviewed foundations and authoritative standards | [Literature and standards matrix](#literature-and-standards-matrix) |
+| Clean and reconcile repositories safely | [Repository cleanup and reconciliation policy](docs/repository-cleanup-and-reconciliation-policy.md) |
 | Adopt quality gates immediately | [Acceptance checklist](#acceptance-checklist) |
 
 ## The integrated research-to-release workflow
@@ -171,6 +172,8 @@ Peer-reviewed methods papers motivate reproducibility and transparent reporting;
 ## Applying this repository
 
 Existing project materials remain in [docs/](docs/), [checklists/](checklists/), [templates/](templates/), [references/](references/) and [manuscript/](manuscript/). The repository's Python package and CI workflow continue to support local validation, artifact initialization and workflow auditing. This README provides the common decision framework; project-specific protocols and validation records belong alongside the projects that execute them.
+
+The [repository cleanup and reconciliation policy](docs/repository-cleanup-and-reconciliation-policy.md) governs maintenance campaigns across multiple repositories, including preservation of dirty worktrees, generated-file cleanup, branch divergence, pull-request disposition and evidence records.
 
 For a first local run, install the package as documented by its Python project configuration, run `pytest`, inspect `bpg-workflow status`, then run `bpg-workflow audit --root .` after initializing any required artifact directories. Check actual command availability and project dependencies rather than assuming every environment contains the CLI.
 
